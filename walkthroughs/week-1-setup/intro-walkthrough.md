@@ -94,7 +94,7 @@ Wherever you see a file that ends with `-walkthrough.md`, you can run the
 this command runs the walkthrough you're currently reading:
 
 ```bash
-teachme ~/step/walkthroughs/week-1-setup/intro-walkthrough.md
+
 ```
 
 You'll use the `teachme` command to run walkthroughs each week.

@@ -1,9 +1,56 @@
+html{
+    background-color: rgb(73, 67, 67);
+    color: #f2f2f2;
+}
+
+body{
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#navbar .navbar-item{
+    padding:8px 16px;
+    float:left;
+    width:auto;
+    border:none;
+    display:block;
+    outline:0s;
+}
+
+.nav-button{
+    border:none;
+    display:inline-block;
+    padding:8px 16px;
+    vertical-align:middle;
+    overflow:hidden;
+    text-decoration:none;
+    color:inherit;
+    background-color:inherit;
+    text-align:center;
+    cursor:pointer;
+    white-space:nowrap
+}
+
+
+#nav-left-side{
+    float: left;
+}
+
+#nav-right-side{
+    float: right;
+}
+
+.clear{
+    clear: both;
+}
+
 #content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 600px;
 }
 
 #greeting-container {
-  margin-top: 20px;
+    margin-top: 20px;
 }
