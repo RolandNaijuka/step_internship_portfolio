@@ -12,17 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
+function generateRandomGreeting(){
+    //TODO use google translated to get greetings in different languages
+    const greetings =
+      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+
+// Pick a random greeting.
+    const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+    return greeting;
+}
+
 /**
  * Adds a random greeting to the page.
  */
 function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
-
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
-
+  
   // Add it to the page.
   const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  greetingContainer.innerText = generateRandomGreeting();
 }
+
+//start at the begin of the website or after a refresh
+function load(){
+    document.getElementById("welcome-note").innerHTML = generateRandomGreeting().concat(" My name is Roland");
+}
+window.onload = load;
+
