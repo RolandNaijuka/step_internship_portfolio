@@ -3,16 +3,20 @@ html{
     color: #fcf4f4;
 }
 
+
 body{
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
 }
 
+
 #navbar{
-    grid-area: header;
+    display: grid;
+    grid-auto-flow: column;
     font-size: 20px;
 }
+
 
 #navbar .navbar-item{
     padding:8px 16px;
@@ -22,6 +26,7 @@ body{
     display:block;
     outline:0s;
 }
+
 
 .nav-button{
     border:none;
@@ -39,16 +44,15 @@ body{
 
 
 #nav-left-side{
-    float: left;
+    align-self: flex-start;
 }
+
 
 #nav-right-side{
-    float: right;
+    align-self: flex-end;
 }
 
-.clear{
-    clear: both;
-}
+
 
 #content {
     margin-top: 30%;
@@ -68,22 +72,27 @@ body{
     z-index: -1;
 }
 
+
 #content-body > h1{
     font-size: 32px;
 }
+
 
 #content-body > p{
     font-size: 16px;
 }
 
+
 #content-body > #main-content-body{
     font-size: 22px;
 }
+
 
 #content-image{
     align-self: center;
     z-index: 100;
 }
+
 
 #content-image img{
     width: 200px;
