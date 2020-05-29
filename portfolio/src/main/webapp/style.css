@@ -3,86 +3,82 @@
 body{
     background-color: rgb(17, 15, 15);
     color: #fcf4f4;
-    max-width: 800px;
     margin-left: auto;
     margin-right: auto;
+    max-width: 800px;
 }
 
 
-#navbar{
+.navbar{
     display: grid;
-    grid-auto-flow: column;
     font-size: 20px;
+    grid-auto-flow: column;
 }
 
 
-#navbar .navbar-item{
-    padding:8px 16px;
-    float:left;
-    width:auto;
+.navbar .navbar-item{
     border:none;
     display:block;
+    float:left;
     outline:0s;
-    
+    padding:8px 16px;
+    width:auto;
 }
 
 
 .nav-button{
-    border:none;
-    display:inline-block;
-    padding:8px 16px;
-    vertical-align:middle;
-    overflow:hidden;
-    text-decoration:none;
-    color:inherit;
     background-color:inherit;
-    text-align:center;
+    border:none;
+    color:inherit;
     cursor:pointer;
+    display:inline-block;
+    overflow:hidden;
+    padding:8px 16px;
+    text-align:center;
+    text-decoration:none;
+    vertical-align:middle;
     white-space:nowrap
 }
 
 
-#nav-left-side{
+.nav-left-side{
     align-self: flex-start;
 }
 
 
-#nav-right-side{
+.nav-right-side{
     justify-self: end;
 }
 
 
-
-#content {
-    margin-top: 30%;
-    display: grid;
-    margin-left: auto;
-    margin-right: auto;
-    grid-template-columns: 550px 200px auto;
+.content {
     column-gap: 0px;
+    display: grid;
+    grid-template-columns: 550px 200px auto;
+    margin: 30% auto 0px;
 }
 
 
-#content-body{
+.content-body{
     align-self: center;
-    position: relative;
-    padding: 10px 25px;
     left: 20px;
+    padding: 10px 25px;
+    position: relative;
     z-index: -1;
 }
 
 
-#content-body > h1{
+.content-body > h1{
     font-size: 32px;
 }
 
 
-#content-body > p{
+.content-body > p{
     font-size: 16px;
 }
 
 
-#content-body > #main-content-body{
+.content-body > #main-content-body{
     font-size: 22px;
 }
 
@@ -93,38 +89,38 @@ body{
 }
 
 
-#content-image img{
-    width: 200px;
-    height: 200px;
+.content-image img{
     border-radius: 50%;
+    height: 200px;
+    width: 200px;
 }
 
 
-#wrapper{
-    display: grid;
-    grid-template-rows: 2fr 2fr;
-    grid-template-columns: 3fr 3fr;
+.wrapper{
     column-gap: 20px;
-    width: 100%;
+    display: grid;
+    grid-template-columns: 3fr 3fr;
+    grid-template-rows: 2fr 2fr;
     height: fit-content;
+    width: 100%;
 }
 
 
 .works-item{
+    background:#F2F2F2;
+    color: black;
     display: grid;
     grid-template-rows:  1fr 3fr 1fr;
-    background:#F2F2F2;
-    opacity: 0.7;
     height: 400px;
-    width: 80%;
     margin-top: 10px;
-    color: black;
+    opacity: 0.7;
+    width: 80%;
 }
 
 
 .works-item > h3{
-    font-size: 20px;
     font-family: 'Crimson Text', serif;
+    font-size: 20px;
     font-weight: bold;
     padding: 3px 5px;
 }
@@ -141,8 +137,8 @@ body{
 
 
 .works-item > img{
-    width: 100%;
     height: 100%;
+    width: 100%;
 }
 
 
@@ -152,29 +148,29 @@ body{
 }
 
 
-#contact-me{
-    width: 500px;
-    height: 450px;
-    border-radius: 3px;
-    background: #F2F2F2;
-    opacity: 0.7;
+.contact-me{
     color: black;
+    background: #F2F2F2;
+    border-radius: 3px;
+    height: 450px;
     margin: 150px auto;
+    opacity: 0.7;
+    width: 500px;
 }
 
 .form-content{
-    display: grid;
-    padding: 5px;
-    grid-template-columns: 1fr 4fr;
     align-items: flex-start;
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    padding: 5px;
 }
 
 
 form button{
-    border-style: outset;
-    margin-left: 10px;
-    border: px solid black;
     background: rgb(39, 162, 233);
+    border: px solid black;
+    border-style: outset;
     color: black;
+    margin-left: 10px;
     text-shadow: none;
 }
