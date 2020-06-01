@@ -12,6 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+function getUserName(){
+    const userName =  fetch("/data").then(response => response.text()).then(name);
+    return userName;
+}
 
 /** @return {string} */
 function generateRandomGreeting(){
@@ -25,21 +29,11 @@ function generateRandomGreeting(){
 }
 
 /**
- * Adds a random greeting to the page.
- */
-function addRandomGreeting() {
-  
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = generateRandomGreeting();
-}
-
-/**
  * Change the innerHTML to a greeting
  * every time use loads or refreshes
  */
 function onLoadWindow(){
-    document.getElementById("welcome-note").innerHTML = generateRandomGreeting().concat(" My name is Roland");
+    document.getElementById("welcome-note").innerHTML = generateRandomGreeting().concat(" My name is ", getUserName());
 }
 
 
