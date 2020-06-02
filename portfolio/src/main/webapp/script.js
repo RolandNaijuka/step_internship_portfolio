@@ -13,8 +13,7 @@
 // limitations under the License.
 
 function getUserName(){
-    const userName =  fetch("/data").then(response => response.text()).then(name);
-    return userName;
+    return fetch("/data").then(response => response.text());
 }
 
 /** @return {string} */
@@ -33,7 +32,7 @@ function generateRandomGreeting(){
  * every time use loads or refreshes
  */
 function onLoadWindow(){
-    document.getElementById("welcome-note").innerHTML = generateRandomGreeting().concat(" My name is ", getUserName());
+    document.getElementById("welcome-note").innerHTML = `${generateRandomGreeting()} My name is ${getUserName()}`;
 }
 
 
