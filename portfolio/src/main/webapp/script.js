@@ -32,6 +32,6 @@ function loadName() {
     fetch("/data").then(response => response.json()).then((user) => {
         document.getElementById("welcome-note").append(`${generateRandomGreeting()} My name is ${user[0]} ${user[1]}`);
         document.getElementById("welcome-note").style.visibility = "visible";
-        document.getElementById("tooltipText").innerText = `${user[2]}\n${user[3]}\n${user[4]}`;
+        document.getElementById("tooltipText").innerText = `Birthday: ${user[2]}\nSchool: ${user[3]}\nMajor: ${user[4]}`;
     });
 }
