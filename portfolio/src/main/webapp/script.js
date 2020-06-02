@@ -12,29 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-function getUserName(){
-    const userName =  fetch("/data").then(response => response.text()).then(name);
-    return userName;
-}
 
 /** @return {string} */
-function generateRandomGreeting(){
+function generateRandomGreeting() {
     //TODO use google translated to get greetings in different languages
     const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+        ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
 
     // Pick a random greeting.
-    const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+    var greeting = greetings[Math.floor(Math.random() * greetings.length)];
     return greeting;
 }
 
 /**
- * Change the innerHTML to a greeting
+ * Change the innerHTML to a greeting and name
  * every time use loads or refreshes
  */
-function onLoadWindow(){
-    document.getElementById("welcome-note").innerHTML = generateRandomGreeting().concat(" My name is ", getUserName());
+function loadName() {
+    fetch("/data").then(response => response.json()).then((user) => {
+        document.getElementById("welcome-note").append(`${generateRandomGreeting()} My name is ${user[0]} ${user[1]}`);
+        document.getElementById("welcome-note").style.visibility = "visible";
+        document.getElementById("tooltipText").innerText = `${user[2]}\n${user[3]}\n${user[4]}`;
+    });
 }
-
-
-window.onload = onLoadWindow;
