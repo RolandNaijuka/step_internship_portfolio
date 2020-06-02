@@ -13,7 +13,10 @@
 // limitations under the License.
 
 
-/** @return {string} */
+/**
+ * @return {string} 
+ * a random greeting
+ */
 function generateRandomGreeting() {
     //TODO use google translated to get greetings in different languages
     const greetings =
