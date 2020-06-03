@@ -13,34 +13,28 @@
 // limitations under the License.
 
 
-/** @return {string} */
-function generateRandomGreeting(){
+/**
+ * @return {string} 
+ * a random greeting
+ */
+function generateRandomGreeting() {
     //TODO use google translated to get greetings in different languages
     const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+        ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
 
     // Pick a random greeting.
-    const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+    var greeting = greetings[Math.floor(Math.random() * greetings.length)];
     return greeting;
 }
 
 /**
- * Adds a random greeting to the page.
- */
-function addRandomGreeting() {
-  
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = generateRandomGreeting();
-}
-
-/**
- * Change the innerHTML to a greeting
+ * Change the innerHTML to a greeting and name
  * every time use loads or refreshes
  */
-function onLoadWindow(){
-    document.getElementById("welcome-note").innerHTML = generateRandomGreeting().concat(" My name is Roland");
+function loadName() {
+    fetch("/data").then(response => response.json()).then((user) => {
+        document.getElementById("welcome-note").append(`${generateRandomGreeting()} My name is ${user[0]} ${user[1]}`);
+        document.getElementById("welcome-note").style.visibility = "visible";
+        document.getElementById("tooltipText").innerText = `Birthday: ${user[2]}\nSchool: ${user[3]}\nMajor: ${user[4]}`;
+    });
 }
-
-
-window.onload = onLoadWindow;

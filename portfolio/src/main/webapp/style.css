@@ -62,7 +62,6 @@ body{
     left: 20px;
     padding: 10px 25px;
     position: relative;
-    z-index: -1;
 }
 
 .content-body > h1{
@@ -80,7 +79,6 @@ body{
 
 .content-image{
     align-self: center;
-    z-index: 100;
 }
 
 .content-image img{
@@ -177,4 +175,22 @@ form button{
     color: black;
     margin-left: 10px;
     text-shadow: none;
+}
+
+.tooltip #tooltipText{
+    background-color: rgba(255, 255, 255, 0.952);
+    border-radius: 6px;
+    color: rgba(11, 11, 165, 0.507);
+    opacity: 1;
+    padding: 5px 0;
+    position: absolute;
+    text-align: center;
+    top: 45px;
+    visibility: hidden;
+    width: 300px;
+    z-index: 100;
+}
+
+.tooltip:hover #tooltipText{
+    visibility: visible;
 }
