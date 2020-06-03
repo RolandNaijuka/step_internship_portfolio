@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<meta charset="UTF-8">
-<title>Roland's - Portfolio</title>
-<link rel="stylesheet" href="style.css">
-<script src="script.js"></script>
-
-<body onload="loadName()">
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Roland's - Portfolio</title>
+	<link rel="stylesheet" href="style.css">
+	<script src="script.js"></script>
+</head>
+<body>
 	<nav class="navbar">
 		<div class="nav-left-side">
 			<a href="/index.html" class="nav-button navbar-item">NR</a>
@@ -20,17 +22,22 @@
 	</nav>
 	<div class="content">
 		<div class="content-body">
-			<p class="tooltip" id="welcome-note">
-				<span id="tooltipText">Roland</span>
-			</p>
+			<p id="welcome-note">Roland</p>
 			<h1>Programmer. Entrepreneur.</h1>
 			<p class="main-content-body">Passionate programmer who enjoys the thinking process of programming. Love data
 				structures and Algorithms</p>
 			<p>Take a tour about my projects and what I love doing in my free time</p>
 		</div>
-		<div class="content-image">
+		<div class="content-image tooltip">
 			<img src="/images/roland_dev_photo.jpeg" alt="Roland's image">
-    </div>
-
+            <p>Hover over image</p>
 		</div>
+        <p id="tooltipText">
+            Birthday: 03/20<br>
+            School: University of Rochester<br>
+            Major: Computer Science<br>
+        </p>
+	</div>
 </body>
+
+</html>

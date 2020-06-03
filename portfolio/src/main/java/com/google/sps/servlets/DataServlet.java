@@ -15,6 +15,7 @@
 package com.google.sps.servlets;
 
 import com.google.gson.Gson;
+import com.google.sps.data.Comments;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.io.IOException;
@@ -26,19 +27,44 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-    ArrayList<String> user = new ArrayList<>(
-            Arrays.asList("Roland","Naijuka","03/20","University of Rochester","Computer Science")
-        );
+    private final int MAX_COMMENTS = 3;
+    private ArrayList<Comments> userComments = new ArrayList<>();
+    
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String userInJson = convertToJson(user);
-        response.setContentType("application/json;");
-        response.getWriter().println(userInJson);
+        response.setContentType("application/json");
+
+        //Convert the arraylist to json string
+        String comments = new Gson().toJson(userComments);
+        response.getWriter().println(comments);
     }
 
-    private String convertToJson(ArrayList<String> user){
-        Gson gson  = new Gson();
-        return gson.toJson(user);
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String comment = getParameter(request,"comment","");
+        String username = getParameter(request, "name","");
+        if(comment.length() != 0){
+            //check if user sent their name
+            Comments newComment = username.length() == 0 ? new Comments(comment) : new Comments(comment, username);
+            if(userComments.size() < MAX_COMMENTS){
+                userComments.add(newComment);
+            }
+            else{
+                userComments.clear();
+                userComments.add(newComment);
+            }
+        }
+        response.sendRedirect("/contact.html");
+    }
+
+    /**
+   * @return the request parameter, 
+   * or the default value if the parameter
+   * was not specified by the client
+   */
+    private String getParameter(HttpServletRequest request, String name, String defaultValue){
+        String value = request.getParameter(name);
+        return value == null ? defaultValue : value;
     }
 }

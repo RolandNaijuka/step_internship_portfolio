@@ -13,25 +13,55 @@
 // limitations under the License.
 
 
-/** @return {string} */
+/* @return {string}
+ * Generate a random greeting
+ */
 function generateRandomGreeting() {
     //TODO use google translated to get greetings in different languages
     const greetings =
         ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
 
     // Pick a random greeting.
-    var greeting = greetings[Math.floor(Math.random() * greetings.length)];
+    const greeting = greetings[Math.floor(Math.random() * greetings.length)];
     return greeting;
+}
+
+/* Retrieve user comments and display them */
+async function getUserComments(){
+    try{
+    const response = await fetch("/data");
+    const data = await response.json();
+
+    const commentEl = document.querySelector("#user-comments");
+        if(typeof(commentEl) != 'undefined' && commentEl != null){
+            for(var comment in data){
+                commentEl.appendChild(createElement(data[comment]));
+            }
+            commentEl.style.display = "block";
+        }
+    }
+    catch(err){
+        console.log("There was an error loading comments!");
+    }
+}
+
+/** Creates an <p> element containing comments. */
+function createElement(comment){
+    const pElement = document.createElement('p');
+    pElement.innerHTML = `${comment.name}: ${comment.comment}`;
+    return pElement;
 }
 
 /**
  * Change the innerHTML to a greeting and name
  * every time use loads or refreshes
  */
-function loadName() {
-    fetch("/data").then(response => response.json()).then((user) => {
-        document.getElementById("welcome-note").append(`${generateRandomGreeting()} My name is ${user[0]} ${user[1]}`);
-        document.getElementById("welcome-note").style.visibility = "visible";
-        document.getElementById("tooltipText").innerText = `Birthday: ${user[2]}\nSchool: ${user[3]}\nMajor: ${user[4]}`;
-    });
+function loadContent() {
+    getUserComments();
+    const greetingEl = document.getElementById("welcome-note")
+    if(typeof(greetingEl) != 'undefined' && greetingEl != null){
+        greetingEl.innerHTML = `${generateRandomGreeting()} My name is Roland`;
+    }
 }
+
+window.onload = loadContent;
