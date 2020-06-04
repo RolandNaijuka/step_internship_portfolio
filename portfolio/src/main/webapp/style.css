@@ -79,12 +79,18 @@ body{
 
 .content-image{
     align-self: center;
+    text-align: center;
 }
 
 .content-image img{
     border-radius: 50%;
     height: 200px;
     width: 200px;
+}
+
+.content-image > p{
+    color: rgb(226, 241, 255) !important;
+    opacity: 0.5;
 }
 
 .wrapper{
@@ -177,20 +183,28 @@ form button{
     text-shadow: none;
 }
 
-.tooltip #tooltipText{
+.tooltip ~ #tooltipText{
     background-color: rgba(255, 255, 255, 0.952);
     border-radius: 6px;
     color: rgba(11, 11, 165, 0.507);
+    height: 60px;
     opacity: 1;
-    padding: 5px 0;
-    position: absolute;
+    position: relative;
     text-align: center;
-    top: 45px;
+    top: 80px;
     visibility: hidden;
-    width: 300px;
+    width: 250px;
     z-index: 100;
 }
 
-.tooltip:hover #tooltipText{
+.tooltip:hover ~ #tooltipText{
     visibility: visible;
+}
+
+#user-comments{
+    display: none;
+}
+
+fieldset legend{
+    margin:0 auto;
 }
