@@ -17,8 +17,11 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
-import com.google.sps.data.Comments;
+import com.google.sps.data.Comment;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,11 +33,24 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-    private ArrayList<Comments> userComments = new ArrayList<>();
     
-
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Query query = new Query("Comments");
+
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        PreparedQuery results = datastore.prepare(query);
+        
+        ArrayList<Comment> userComments = new ArrayList<>();
+        for(Entity entity: results.asIterable()){
+            long id = entity.getKey().getId();
+            String username = (String) entity.getProperty("name");
+            String comment = (String) entity.getProperty("comment");
+            
+            Comment userComment =  new Comment(id, username, comment);
+            userComments.add(userComment);
+        }
+        
         response.setContentType("application/json");
 
         //Convert the arraylist to json string
@@ -49,6 +65,7 @@ public class DataServlet extends HttpServlet {
         // Do not store an empty comment
         if(comment.length() == 0){
             response.sendRedirect("/contact.html");
+            return;
         }
         Entity commentEntity = new Entity("Comments");
         commentEntity.setProperty("name",username);
