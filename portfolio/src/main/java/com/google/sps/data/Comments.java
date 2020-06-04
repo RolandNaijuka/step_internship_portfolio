@@ -31,5 +31,4 @@ public class Comments{
         this.comment = comment;
         this.name = name;
     }
-
 }
