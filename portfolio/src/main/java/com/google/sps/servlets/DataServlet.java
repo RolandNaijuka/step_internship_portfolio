@@ -14,11 +14,14 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.gson.Gson;
 import com.google.sps.data.Comments;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +30,6 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-    private final int MAX_COMMENTS = 3;
     private ArrayList<Comments> userComments = new ArrayList<>();
     
 
@@ -43,15 +45,17 @@ public class DataServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String comment = getParameter(request,"comment","");
-        String username = getParameter(request, "name","");
-        if(comment.length() != 0){
-            //check if user sent their name
-            Comments newComment = username.length() == 0 ? new Comments(comment) : new Comments(comment, username);
-            if(userComments.size() >= MAX_COMMENTS){
-                userComments.clear();
-            }   
-            userComments.add(newComment);
+        String username = getParameter(request, "name","user");
+        // Do not store an empty comment
+        if(comment.length() == 0){
+            response.sendRedirect("/contact.html");
         }
+        Entity commentEntity = new Entity("Comments");
+        commentEntity.setProperty("name",username);
+        commentEntity.setProperty("comment",comment);
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        datastore.put(commentEntity);
+
         response.sendRedirect("/contact.html");
     }
 
@@ -60,6 +64,6 @@ public class DataServlet extends HttpServlet {
    */
     private String getParameter(HttpServletRequest request, String name, String defaultValue){
         String value = request.getParameter(name);
-        return value == null ? defaultValue : value;
+        return value.length() == 0 ? defaultValue : value;
     }
 }
