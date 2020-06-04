@@ -13,9 +13,7 @@
 // limitations under the License.
 
 
-/* @return {string}
- * Generate a random greeting
- */
+/** Generate a random greeting */
 function generateRandomGreeting() {
     //TODO use google translated to get greetings in different languages
     const greetings =
@@ -29,12 +27,12 @@ function generateRandomGreeting() {
 /* Retrieve user comments and display them */
 async function getUserComments(){
     try{
-    const response = await fetch("/data");
-    const data = await response.json();
+        const response = await fetch("/data");
+        const data = await response.json();
 
-    const commentEl = document.querySelector("#user-comments");
-        if(typeof(commentEl) != 'undefined' && commentEl != null){
-            for(var comment in data){
+        const commentEl = document.querySelector("#user-comments");
+        if(typeof(commentEl) != 'undefined' || commentEl != null){
+            for(let comment in data){
                 commentEl.appendChild(createElement(data[comment]));
             }
             commentEl.style.display = "block";
@@ -59,7 +57,7 @@ function createElement(comment){
 function loadContent() {
     getUserComments();
     const greetingEl = document.getElementById("welcome-note")
-    if(typeof(greetingEl) != 'undefined' && greetingEl != null){
+    if(typeof(greetingEl) != 'undefined' || greetingEl != null){
         greetingEl.innerHTML = `${generateRandomGreeting()} My name is Roland`;
     }
 }
