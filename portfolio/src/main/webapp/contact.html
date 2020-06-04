@@ -32,10 +32,17 @@
                 <label for="comment">Comments</label>
                 <textarea id="comment" name="comment" rows="7" cols="30" placeholder="Type your comments here!" required></textarea><br>
             </div>
-			<button role="submit">Submit</button>
+            <button role="submit" name="commentButton">Submit</button>
 		</form>
+        <form>
+            <div>
+                <label>Number of Comments: </label>
+                <input type="number" min="0" max="50" id="numComments" onchange="updateNumComments();">
+            </div>
+            <!-- <button role="submit" name="updateButton">Update</button> -->
+        </form>
 		<fieldset id="user-comments">
-			<legend>Your comments</legend>
+			
 		</fieldset>
 	</div>
 </body>
