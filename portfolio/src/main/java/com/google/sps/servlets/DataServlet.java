@@ -47,21 +47,16 @@ public class DataServlet extends HttpServlet {
         if(comment.length() != 0){
             //check if user sent their name
             Comments newComment = username.length() == 0 ? new Comments(comment) : new Comments(comment, username);
-            if(userComments.size() < MAX_COMMENTS){
-                userComments.add(newComment);
-            }
-            else{
+            if(userComments.size() >= MAX_COMMENTS){
                 userComments.clear();
-                userComments.add(newComment);
-            }
+            }   
+            userComments.add(newComment);
         }
         response.sendRedirect("/contact.html");
     }
 
     /**
-   * @return the request parameter, 
-   * or the default value if the parameter
-   * was not specified by the client
+   * Generate the user details that make up a comment sent by the user.
    */
     private String getParameter(HttpServletRequest request, String name, String defaultValue){
         String value = request.getParameter(name);
