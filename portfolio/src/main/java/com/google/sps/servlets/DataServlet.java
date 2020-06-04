@@ -20,6 +20,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.FetchOptions.Builder;
 import com.google.gson.Gson;
 import com.google.sps.data.Comment;
 import java.io.IOException;
@@ -37,7 +38,13 @@ public class DataServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Query query = new Query("Comments");
-
+        int numComments;
+        try{
+            numComments = Integer.parseInt(request.getParameter("numComments"));
+        }catch(NumberFormatException e){
+            // Default number of comments
+            numComments = 5;
+        }
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
         
@@ -48,6 +55,12 @@ public class DataServlet extends HttpServlet {
             String comment = (String) entity.getProperty("comment");
             
             Comment userComment =  new Comment(id, username, comment);
+            
+            // Do not exceed max number of comments to display
+            if(userComments.size() >= numComments){
+                break;
+            }
+
             userComments.add(userComment);
         }
         
