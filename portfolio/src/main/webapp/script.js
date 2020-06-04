@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// default max comments to display
+let MAX_COMMENTS = 5;
 
 /** Generate a random greeting */
 function generateRandomGreeting() {
@@ -24,14 +26,24 @@ function generateRandomGreeting() {
     return greeting;
 }
 
+/* Update the MAX_COMMENTS */
+async function updateNumComments(){
+    const userNumComments = document.querySelector("#numComments").value;
+    getUserComments(userNumComments);
+}
+
 /* Retrieve user comments and display them */
-async function getUserComments(){
+async function getUserComments(numComments = MAX_COMMENTS){
     try{
-        const response = await fetch("/data");
+        const response = await fetch(`/data?numComments=${numComments}`);
         const data = await response.json();
 
         const commentEl = document.querySelector("#user-comments");
         if(typeof(commentEl) != 'undefined' || commentEl != null){
+            commentEl.innerHTML = "";
+            // add a legend
+            commentEl.appendChild(createLegendEl());
+
             for(let comment in data){
                 commentEl.appendChild(createElement(data[comment]));
             }
@@ -43,6 +55,11 @@ async function getUserComments(){
     }
 }
 
+/* Clean the fieldset children before */
+function removeAllChildren(id){
+    document.getElementById(id).innerHTML = "";
+}
+
 /** Creates an <p> element containing comments. */
 function createElement(comment){
     const pElement = document.createElement('p');
@@ -50,12 +67,19 @@ function createElement(comment){
     return pElement;
 }
 
+/* Creates a <legend> element */
+function createLegendEl(){
+    const legendEle = document.createElement('legend');
+    legendEle.innerHTML = "Your comments";
+    return legendEle;
+}
+
 /**
  * Change the innerHTML to a greeting and name
  * every time use loads or refreshes
  */
 function loadContent() {
-    getUserComments();
+    updateNumComments();
     const greetingEl = document.getElementById("welcome-note")
     if(typeof(greetingEl) != 'undefined' || greetingEl != null){
         greetingEl.innerHTML = `${generateRandomGreeting()} My name is Roland`;
