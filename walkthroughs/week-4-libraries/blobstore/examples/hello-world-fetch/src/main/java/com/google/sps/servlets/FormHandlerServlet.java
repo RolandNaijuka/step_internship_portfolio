@@ -58,7 +58,8 @@ public class FormHandlerServlet extends HttpServlet {
     out.println("<img src=\"" + imageUrl + "\" />");
     out.println("</a>");
     out.println("<p>Here's the text you entered:</p>");
-    out.println(message);
+    out.println(message+"<br>");
+    out.println(imageUrl);
   }
 
   /** Returns a URL that points to the uploaded file, or null if the user didn't upload a file. */

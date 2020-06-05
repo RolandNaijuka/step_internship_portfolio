@@ -75,7 +75,7 @@ public class DataServlet extends HttpServlet {
         String username = getParameter(request, "name","user");
         // Do not store an empty comment
         if(comment.length() == 0) {
-            response.sendRedirect("/contact.html");
+            response.sendRedirect("/contact.jsp");
             return;
         }
         Entity commentEntity = new Entity("Comments");
@@ -84,7 +84,7 @@ public class DataServlet extends HttpServlet {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(commentEntity);
 
-        response.sendRedirect("/contact.html");
+        response.sendRedirect("/contact.jsp");
     }
 
     /**

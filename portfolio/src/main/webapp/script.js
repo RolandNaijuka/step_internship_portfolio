@@ -17,85 +17,86 @@ let MAX_COMMENTS = 5;
 
 /** Generate a random greeting */
 function generateRandomGreeting() {
-    //TODO use google translated to get greetings in different languages
-    const greetings =
-        ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+  //TODO use google translated to get greetings in different languages
+  const greetings =
+      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
 
-    // Pick a random greeting.
-    const greeting = greetings[Math.floor(Math.random() * greetings.length)];
-    return greeting;
+  // Pick a random greeting.
+  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+  return greeting;
 }
 
 /* Update the MAX_COMMENTS */
 function updateNumComments() {
-    const userNumComments = document.querySelector("#numComments").value;
-    getUserComments(userNumComments);
+  const userNumComments = document.querySelector("#numComments").value;
+  getUserComments(userNumComments);
 }
 
 /* Retrieve user comments and display them */
 async function getUserComments(numComments=MAX_COMMENTS) {
-    try {
-        const response = await fetch(`/data?numComments=${numComments}`);
-        const data = await response.json();
+  try {
+    const response = await fetch(`/data?numComments=${numComments}`);
+    const data = await response.json();
 
-        const commentEl = document.querySelector("#user-comments");
-        if(typeof(commentEl) != 'undefined' && commentEl != null) {
-            commentEl.innerText = "";
-            // add a legend
-            commentEl.appendChild(createLegendEl());
+    const commentEl = document.querySelector("#user-comments");
+    if(typeof(commentEl) != 'undefined') {
+        commentEl.innerText = "";
 
-            for(let comment in data) {
-                commentEl.appendChild(createElement(data[comment]));
-            }
-            commentEl.style.display = "block";
+        for(let comment in data) {
+          commentEl.appendChild(createElement(data[comment]));
         }
-    } catch(err) {
-        console.log("There was an error loading comments!");
     }
+  } catch(err) {
+    console.log("There was an error loading comments!");
+  }
 }
 
 /* Delete all the comments from the server */
 async function deleteComments() {
-    try {
-        await fetch("/delete-data", {
-            method: "POST"
-        });
-    } catch(error) {
-        alert("Try again!");
-    } finally {
-        updateNumComments();
-    }
+  try {
+    await fetch("/delete-data", {
+        method: "POST"
+    });
+  } catch(error) {
+    alert("Try again!");
+  } finally {
+    updateNumComments();
+  }
 }
 
-/* Clean the fieldset children before */
-function removeAllChildren(id){
-    document.getElementById(id).innerHTML = "";
+/* Retrieve the url for the posting the comments section form and store it */
+async function fetchBlobUrl() {
+  const request = await fetch("/blobstore-upload-url");
+  return await request.text();
+}
+
+/** Set the action attribute value in the comments' form */
+function setActionAttr() {
+  const postUrl = fetchBlobUrl();
+  const commentsForm = document.querySelector("#comment-form");
+  if(typeof(commentEl) != 'undefined'){
+    commentsForm.actionAttrValue = postUrl;
+  }
 }
 
 /** Creates an <p> element containing comments. */
 function createElement(comment) {
-    const pElement = document.createElement('p');
-    pElement.innerHTML = `${comment.name}: ${comment.comment}`;
-    return pElement;
-}
-
-/* Creates a <legend> element */
-function createLegendEl() {
-    const legendEle = document.createElement('legend');
-    legendEle.innerHTML = "Your comments";
-    return legendEle;
+  const pElement = document.createElement('p');
+  pElement.innerHTML = `${comment.name}: ${comment.comment}`;
+  return pElement;
 }
 
 /**
- * Change the innerHTML to a greeting and name
- * every time use loads or refreshes
- */
+* Change the innerHTML to a greeting and name
+* every time use loads or refreshes
+*/
 function loadContent() {
-    updateNumComments();
-    const greetingEl = document.getElementById("welcome-note")
-    if(typeof(greetingEl) != 'undefined' && greetingEl != null){
-        greetingEl.innerHTML = `${generateRandomGreeting()} My name is Roland`;
-    }
+  setActionAttr();
+  updateNumComments();
+  const greetingEl = document.getElementById("welcome-note")
+  if(typeof(greetingEl) != 'undefined') {
+    greetingEl.innerHTML = `${generateRandomGreeting()} My name is Roland`;
+  }
 }
 
 window.onload = loadContent;

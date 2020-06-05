@@ -23,3 +23,5 @@ function fetchBlobstoreUrlAndShowForm() {
         messageForm.classList.remove('hidden');
       });
 }
+
+window.onload = fetchBlobstoreUrlAndShowForm;
