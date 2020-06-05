@@ -32,14 +32,13 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-    
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         
         int numComments;
-        try{
+        try {
             numComments = Integer.parseInt(request.getParameter("numComments"));
-        }catch(NumberFormatException e){
+        } catch(NumberFormatException e) {
             // Default number of comments
             numComments = 5;
         }
@@ -48,7 +47,7 @@ public class DataServlet extends HttpServlet {
         PreparedQuery results = datastore.prepare(query);
         
         ArrayList<Comment> userComments = new ArrayList<>();
-        for(Entity entity: results.asIterable()){
+        for(Entity entity: results.asIterable()) {
             long id = entity.getKey().getId();
             String username = (String) entity.getProperty("name");
             String comment = (String) entity.getProperty("comment");
@@ -56,7 +55,7 @@ public class DataServlet extends HttpServlet {
             Comment userComment =  new Comment(id, username, comment);
             
             // Do not exceed max number of comments to display
-            if(userComments.size() >= numComments){
+            if(userComments.size() >= numComments) {
                 break;
             }
 
@@ -75,7 +74,7 @@ public class DataServlet extends HttpServlet {
         String comment = getParameter(request,"comment","");
         String username = getParameter(request, "name","user");
         // Do not store an empty comment
-        if(comment.length() == 0){
+        if(comment.length() == 0) {
             response.sendRedirect("/contact.html");
             return;
         }
@@ -91,7 +90,7 @@ public class DataServlet extends HttpServlet {
     /**
    * Generate the user details that make up a comment sent by the user.
    */
-    private String getParameter(HttpServletRequest request, String name, String defaultValue){
+    private String getParameter(HttpServletRequest request, String name, String defaultValue) {
         String value = request.getParameter(name);
         return value.length() == 0 ? defaultValue : value;
     }
