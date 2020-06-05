@@ -27,44 +27,42 @@ function generateRandomGreeting() {
 }
 
 /* Update the MAX_COMMENTS */
-function updateNumComments(){
+function updateNumComments() {
     const userNumComments = document.querySelector("#numComments").value;
     getUserComments(userNumComments);
 }
 
 /* Retrieve user comments and display them */
-async function getUserComments(numComments=MAX_COMMENTS){
-    try{
+async function getUserComments(numComments=MAX_COMMENTS) {
+    try {
         const response = await fetch(`/data?numComments=${numComments}`);
         const data = await response.json();
 
         const commentEl = document.querySelector("#user-comments");
-        if(typeof(commentEl) != 'undefined' || commentEl != null){
+        if(typeof(commentEl) != 'undefined' && commentEl != null) {
             commentEl.innerText = "";
             // add a legend
             commentEl.appendChild(createLegendEl());
 
-            for(let comment in data){
+            for(let comment in data) {
                 commentEl.appendChild(createElement(data[comment]));
             }
             commentEl.style.display = "block";
         }
-    }
-    catch(err){
+    } catch(err) {
         console.log("There was an error loading comments!");
     }
 }
 
 /* Delete all the comments from the server */
-async function deleteComments(){
-    try{
+async function deleteComments() {
+    try {
         await fetch("/delete-data", {
             method: "POST"
         });
-    }
-    catch(error){
+    } catch(error) {
         alert("Try again!");
-    }finally{
+    } finally {
         updateNumComments();
     }
 }
@@ -75,14 +73,14 @@ function removeAllChildren(id){
 }
 
 /** Creates an <p> element containing comments. */
-function createElement(comment){
+function createElement(comment) {
     const pElement = document.createElement('p');
     pElement.innerHTML = `${comment.name}: ${comment.comment}`;
     return pElement;
 }
 
 /* Creates a <legend> element */
-function createLegendEl(){
+function createLegendEl() {
     const legendEle = document.createElement('legend');
     legendEle.innerHTML = "Your comments";
     return legendEle;
@@ -95,7 +93,7 @@ function createLegendEl(){
 function loadContent() {
     updateNumComments();
     const greetingEl = document.getElementById("welcome-note")
-    if(typeof(greetingEl) != 'undefined' || greetingEl != null){
+    if(typeof(greetingEl) != 'undefined' && greetingEl != null){
         greetingEl.innerHTML = `${generateRandomGreeting()} My name is Roland`;
     }
 }
