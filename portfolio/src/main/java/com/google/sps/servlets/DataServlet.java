@@ -14,11 +14,16 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 import com.google.gson.Gson;
-import com.google.sps.data.Comments;
+import com.google.sps.data.Comment;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,12 +32,36 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-    private final int MAX_COMMENTS = 3;
-    private ArrayList<Comments> userComments = new ArrayList<>();
-    
-
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        
+        int numComments;
+        try {
+            numComments = Integer.parseInt(request.getParameter("numComments"));
+        } catch(NumberFormatException e) {
+            // Default number of comments
+            numComments = 5;
+        }
+        Query query = new Query("Comments");
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        PreparedQuery results = datastore.prepare(query);
+        
+        ArrayList<Comment> userComments = new ArrayList<>();
+        for(Entity entity: results.asIterable()) {
+            long id = entity.getKey().getId();
+            String username = (String) entity.getProperty("name");
+            String comment = (String) entity.getProperty("comment");
+            
+            Comment userComment =  new Comment(id, username, comment);
+            
+            // Do not exceed max number of comments to display
+            if(userComments.size() >= numComments) {
+                break;
+            }
+
+            userComments.add(userComment);
+        }
+        
         response.setContentType("application/json");
 
         //Convert the arraylist to json string
@@ -43,23 +72,26 @@ public class DataServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String comment = getParameter(request,"comment","");
-        String username = getParameter(request, "name","");
-        if(comment.length() != 0){
-            //check if user sent their name
-            Comments newComment = username.length() == 0 ? new Comments(comment) : new Comments(comment, username);
-            if(userComments.size() >= MAX_COMMENTS){
-                userComments.clear();
-            }   
-            userComments.add(newComment);
+        String username = getParameter(request, "name","user");
+        // Do not store an empty comment
+        if(comment.length() == 0) {
+            response.sendRedirect("/contact.html");
+            return;
         }
+        Entity commentEntity = new Entity("Comments");
+        commentEntity.setProperty("name",username);
+        commentEntity.setProperty("comment",comment);
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        datastore.put(commentEntity);
+
         response.sendRedirect("/contact.html");
     }
 
     /**
    * Generate the user details that make up a comment sent by the user.
    */
-    private String getParameter(HttpServletRequest request, String name, String defaultValue){
+    private String getParameter(HttpServletRequest request, String name, String defaultValue) {
         String value = request.getParameter(name);
-        return value == null ? defaultValue : value;
+        return value.length() == 0 ? defaultValue : value;
     }
 }

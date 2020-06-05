@@ -14,21 +14,20 @@
 
 package com.google.sps.data;
 
-public class Comments{
+public class Comment{
+
+    /* Comment id for querying */
+    private long id;
+    
     /* The comment of the users */
     private String comment;
 
-    /* Default name of the person commenting (or user) */
-    private String name = "User";
+    /** The name of the person commenting (or user) */
+    private String name;
 
-    /* User can decide to send only comments */
-    public Comments(String comment){
-        this.comment = comment;
-    }
-
-    /* When user decides to add their name as well */
-    public Comments(String comment, String name){
-        this.comment = comment;
+    public Comment(long id, String name, String comment){
+        this.id = id;
         this.name = name;
+        this.comment = comment;
     }
 }
