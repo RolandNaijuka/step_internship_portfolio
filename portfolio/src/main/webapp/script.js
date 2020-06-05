@@ -35,11 +35,11 @@ function updateNumComments() {
 /* Retrieve user comments and display them */
 async function getUserComments(numComments=MAX_COMMENTS) {
   try {
-    const response = await fetch(`/data?numComments=${numComments}`);
+    const response = await fetch(`/${await fetchBlobUrl()}?numComments=${numComments}`);
     const data = await response.json();
 
     const commentEl = document.querySelector("#user-comments");
-    if(typeof(commentEl) != 'undefined') {
+    if(typeof(commentEl) != 'undefined' && commentEl != null) {
         commentEl.innerText = "";
 
         for(let comment in data) {
@@ -67,15 +67,15 @@ async function deleteComments() {
 /* Retrieve the url for the posting the comments section form and store it */
 async function fetchBlobUrl() {
   const request = await fetch("/blobstore-upload-url");
+  // TODO get the relative link
   return await request.text();
 }
 
 /** Set the action attribute value in the comments' form */
 function setActionAttr() {
-  const postUrl = fetchBlobUrl();
   const commentsForm = document.querySelector("#comment-form");
-  if(typeof(commentEl) != 'undefined'){
-    commentsForm.actionAttrValue = postUrl;
+  if(typeof(commentsForm) != 'undefined' && commentsForm != null){
+    commentsForm.actionAttrValue = fetchBlobUrl();
   }
 }
 
@@ -90,11 +90,12 @@ function createElement(comment) {
 * Change the innerHTML to a greeting and name
 * every time use loads or refreshes
 */
-function loadContent() {
+async function loadContent() {
   setActionAttr();
+  console.log(await fetchBlobUrl());
   updateNumComments();
   const greetingEl = document.getElementById("welcome-note")
-  if(typeof(greetingEl) != 'undefined') {
+  if(typeof(greetingEl) != 'undefined' && greetingEl != null) {
     greetingEl.innerHTML = `${generateRandomGreeting()} My name is Roland`;
   }
 }
