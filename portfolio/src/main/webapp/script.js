@@ -27,7 +27,7 @@ function generateRandomGreeting() {
 }
 
 /* Update the MAX_COMMENTS */
-async function updateNumComments(){
+function updateNumComments(){
     const userNumComments = document.querySelector("#numComments").value;
     getUserComments(userNumComments);
 }
