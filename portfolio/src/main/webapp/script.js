@@ -33,14 +33,14 @@ async function updateNumComments(){
 }
 
 /* Retrieve user comments and display them */
-async function getUserComments(numComments = MAX_COMMENTS){
+async function getUserComments(numComments=MAX_COMMENTS){
     try{
         const response = await fetch(`/data?numComments=${numComments}`);
         const data = await response.json();
 
         const commentEl = document.querySelector("#user-comments");
         if(typeof(commentEl) != 'undefined' || commentEl != null){
-            commentEl.innerHTML = "";
+            commentEl.innerText = "";
             // add a legend
             commentEl.appendChild(createLegendEl());
 
@@ -52,6 +52,20 @@ async function getUserComments(numComments = MAX_COMMENTS){
     }
     catch(err){
         console.log("There was an error loading comments!");
+    }
+}
+
+/* Delete all the comments from the server */
+async function deleteComments(){
+    try{
+        await fetch("/delete-data", {
+            method: "POST"
+        });
+    }
+    catch(error){
+        alert("Try again!");
+    }finally{
+        updateNumComments();
     }
 }
 
