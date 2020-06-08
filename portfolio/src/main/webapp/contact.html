@@ -18,8 +18,8 @@
 		<div class="nav-right-side">
 			<a href="https://www.linkedin.com/in/roland-naijuka" target="_blank"
 				class="nav-button navbar-item"><img src="/images/linkedin.png" alt="My LinkedIn"></a>
-      <a href="mailto:naijuka.roland@outlook.com" target="_blank"
-        class="nav-button navbar-item"><img src="/images/mail.png" alt="Email me"></a>
+			<a href="mailto:naijuka.roland@outlook.com" target="_blank"
+				class="nav-button navbar-item"><img src="/images/mail.png" alt="Email me"></a>
 		</div>
 	</nav>
 
@@ -29,22 +29,22 @@
 			<div class="form-content">
 				<label for="name">Name</label>
 				<input type="text" name="name" id="name" placeholder="optional"><br>
-      </div>
-      <div class="form-content">
-        <label for="name">Upload an image</label>
-        <input type="file" name="image"><br>
-      </div>
-      <div class="form-content">
-        <label for="comment">Comments</label>
-        <textarea id="comment" name="comment" rows="7" cols="30" placeholder="Type your comments here!" required></textarea><br>
-      </div>
-      <button role="submit" name="commentButton">Submit</button>
+      		</div>
+			<div class="form-content">
+				<label for="name">Upload an image</label>
+				<input type="file" name="image"><br>
+			</div>
+			<div class="form-content">
+				<label for="comment">Comments</label>
+				<textarea id="comment" name="comment" rows="7" cols="30" placeholder="Type your comments here!" required></textarea><br>
+			</div>
+			<button role="submit" name="commentButton">Submit</button>
 		</form>
 		<form>
 			<div>
 				<label>Number of Comments: </label>
 				<input type="number" min="0" max="50" id="numComments" onchange="updateNumComments();">
-      </div>
+      		</div>
 		</form>
 		<button onclick="deleteComments();">Delete Comments</button>
 		<div id="user-comments">
