@@ -25,9 +25,13 @@ public class Comment{
     /** The name of the person commenting (or user) */
     private String name;
 
-    public Comment(long id, String name, String comment){
+    /** Image form the user */
+    private String imageUrl;
+
+    public Comment(long id, String name, String comment, String imageUrl){
         this.id = id;
         this.name = name;
         this.comment = comment;
+        this.imageUrl = imageUrl;
     }
 }

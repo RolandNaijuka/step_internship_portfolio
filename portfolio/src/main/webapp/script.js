@@ -17,85 +17,94 @@ let MAX_COMMENTS = 5;
 
 /** Generate a random greeting */
 function generateRandomGreeting() {
-    //TODO use google translated to get greetings in different languages
-    const greetings =
-        ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+  //TODO use google translated to get greetings in different languages
+  const greetings =
+      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
 
-    // Pick a random greeting.
-    const greeting = greetings[Math.floor(Math.random() * greetings.length)];
-    return greeting;
+  // Pick a random greeting.
+  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+  return greeting;
 }
 
 /* Update the MAX_COMMENTS */
 function updateNumComments() {
-    const userNumComments = document.querySelector("#numComments").value;
-    getUserComments(userNumComments);
+  const userNumComments = document.querySelector("#numComments").value;
+  getUserComments(userNumComments);
 }
 
 /* Retrieve user comments and display them */
 async function getUserComments(numComments=MAX_COMMENTS) {
-    try {
-        const response = await fetch(`/data?numComments=${numComments}`);
-        const data = await response.json();
+  try {
+    const response = await fetch(`/data?numComments=${numComments}`);
+    const data = await response.json();
 
-        const commentEl = document.querySelector("#user-comments");
-        if(typeof(commentEl) != 'undefined' && commentEl != null) {
-            commentEl.innerText = "";
-            // add a legend
-            commentEl.appendChild(createLegendEl());
+    const commentEl = document.querySelector("#user-comments");
+    if(commentEl) {
+        commentEl.innerText = "";
 
-            for(let comment in data) {
-                commentEl.appendChild(createElement(data[comment]));
-            }
-            commentEl.style.display = "block";
+        for(let comment in data) {
+          commentEl.appendChild(createElement(data[comment]));
+          commentEl.appendChild(createImgElement(data[comment]));
         }
-    } catch(err) {
-        console.log("There was an error loading comments!");
     }
+  } catch(error) {
+    console.error("There was an error loading comments: ", error);
+  }
 }
 
 /* Delete all the comments from the server */
 async function deleteComments() {
-    try {
-        await fetch("/delete-data", {
-            method: "POST"
-        });
-    } catch(error) {
-        alert("Try again!");
-    } finally {
-        updateNumComments();
-    }
+  try {
+    await fetch("/delete-data", {
+        method: "POST"
+    });
+  } catch(error) {
+    alert("Try again!");
+  } finally {
+    updateNumComments();
+  }
 }
 
-/* Clean the fieldset children before */
-function removeAllChildren(id){
-    document.getElementById(id).innerHTML = "";
+/* Retrieve the url for the posting the comments section form and store it */
+async function fetchBlobUrl() {
+  const request = await fetch("/blobstore-upload-url");
+  // TODO get the relative link
+  return await request.text();
+}
+
+/** Set the action attribute value in the comments' form */
+async function setActionAttr() {
+  const commentsForm = document.querySelector("#comment-form");
+
+  if(commentsForm){
+    commentsForm.action = fetchBlobUrl();
+  }
 }
 
 /** Creates an <p> element containing comments. */
 function createElement(comment) {
-    const pElement = document.createElement('p');
-    pElement.innerHTML = `${comment.name}: ${comment.comment}`;
-    return pElement;
+  const pElement = document.createElement('p');
+  pElement.innerHTML = `${comment.name}: ${comment.comment}`;
+  return pElement;
 }
 
-/* Creates a <legend> element */
-function createLegendEl() {
-    const legendEle = document.createElement('legend');
-    legendEle.innerHTML = "Your comments";
-    return legendEle;
+/** create img element to display the image submitted by user */
+function createImgElement(comment){
+  const imgElement = document.createElement('IMG');
+  imgElement.setAttribute("src", `${comment.imageUrl}`);
+  imgElement.setAttribute("alt", "Image uploaded by user");
+  return imgElement;
 }
 
-/**
- * Change the innerHTML to a greeting and name
- * every time use loads or refreshes
- */
-function loadContent() {
-    updateNumComments();
-    const greetingEl = document.getElementById("welcome-note")
-    if(typeof(greetingEl) != 'undefined' && greetingEl != null){
-        greetingEl.innerHTML = `${generateRandomGreeting()} My name is Roland`;
-    }
+
+/** Change the innerHTML to a greeting and name every time use loads or refreshes */
+async function loadContent() {
+  setActionAttr();
+  updateNumComments();
+  const greetingEl = document.getElementById("welcome-note");
+  if(greetingEl) {
+    greetingEl.innerHTML = `${generateRandomGreeting()} My name is Roland`;
+  }
 }
 
 window.onload = loadContent;
