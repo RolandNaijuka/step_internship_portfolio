@@ -39,15 +39,15 @@ async function getUserComments(numComments=MAX_COMMENTS) {
     const data = await response.json();
 
     const commentEl = document.querySelector("#user-comments");
-    if(typeof(commentEl) != 'undefined' && commentEl != null) {
+    if(commentEl) {
         commentEl.innerText = "";
 
         for(let comment in data) {
           commentEl.appendChild(createElement(data[comment]));
         }
     }
-  } catch(err) {
-    console.log("There was an error loading comments!");
+  } catch(error) {
+    console.error("There was an error loading comments: ", error);
   }
 }
 
@@ -74,8 +74,8 @@ async function fetchBlobUrl() {
 /** Set the action attribute value in the comments' form */
 function setActionAttr() {
   const commentsForm = document.querySelector("#comment-form");
-  if(typeof(commentsForm) != 'undefined' && commentsForm != null){
-    commentsForm.actionAttrValue = fetchBlobUrl();
+  if(commentsForm){
+    commentsForm.action = fetchBlobUrl();
   }
 }
 
@@ -92,10 +92,9 @@ function createElement(comment) {
 */
 async function loadContent() {
   setActionAttr();
-  console.log(await fetchBlobUrl());
   updateNumComments();
   const greetingEl = document.getElementById("welcome-note")
-  if(typeof(greetingEl) != 'undefined' && greetingEl != null) {
+  if(greetingEl) {
     greetingEl.innerHTML = `${generateRandomGreeting()} My name is Roland`;
   }
 }
