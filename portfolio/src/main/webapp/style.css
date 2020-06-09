@@ -61,7 +61,7 @@ body{
 
 form button{
   background: rgb(39, 162, 233);
-  border: px solid black;
+  border: 1px solid black;
   border-style: outset;
   color: black;
   margin-left: 10px;
