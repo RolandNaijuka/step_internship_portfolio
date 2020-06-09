@@ -90,7 +90,7 @@ function createElement(comment) {
 async function loadContent() {
   setActionAttr();
   updateNumComments();
-  const greetingEl = document.getElementById("welcome-note")
+  const greetingEl = document.getElementById("welcome-note");
   if(greetingEl) {
     greetingEl.innerHTML = `${generateRandomGreeting()} My name is Roland`;
   }
