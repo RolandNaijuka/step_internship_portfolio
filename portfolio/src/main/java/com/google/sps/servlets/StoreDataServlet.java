@@ -25,6 +25,8 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -38,10 +40,14 @@ import javax.servlet.http.HttpServletResponse;
 /* Servlet that stores data from the user */
 @WebServlet("/store-data")
 public class StoreDataServlet extends HttpServlet {
+  private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    UserService userService = UserServiceFactory.getUserService();
     String comment = getParameter(request,"comment","");
     String username = getParameter(request, "name","user");
+    String emailAddress = userService.getCurrentUser().getEmail();
 
     // Get the URL of the image that the user uploaded to Blobstore.
     String imageUrl = getUploadedFileUrl(request, "image");
@@ -52,10 +58,11 @@ public class StoreDataServlet extends HttpServlet {
       response.sendRedirect("/contact.html");
       return;
     }
-    Entity commentEntity = new Entity("Comments");
+    Entity commentEntity = new Entity("Comments", emailAddress);
     commentEntity.setProperty("name",username);
     commentEntity.setProperty("comment",comment);
     commentEntity.setProperty("imageUrl",imageUrl);
+    commentEntity.setProperty("emailAddress", emailAddress);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
 
@@ -72,9 +79,9 @@ public class StoreDataServlet extends HttpServlet {
 
   /** Returns a URL that points to the uploaded file, or null if the user didn't upload a file. */
   private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
-    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
-    List<BlobKey> blobKeys = blobs.get("image");
+    List<BlobKey> blobKeys = blobs.get(formInputElementName);
 
     // User submitted form without selecting a file, so we can't get a URL. (dev server)
     if (blobKeys == null || blobKeys.isEmpty()){
@@ -91,10 +98,6 @@ public class StoreDataServlet extends HttpServlet {
       blobstoreService.delete(blobKey);
       return null;
     }
-
-    // We could check the validity of the file here, e.g. to make sure it's an image file
-    // TODO validity of file
-    // https://stackoverflow.com/q/10779564/873165
 
     // Get a URL that points to the uploaded file.
     ImagesService imagesService = ImagesServiceFactory.getImagesService();
