@@ -12,6 +12,7 @@ body{
   color: black;
   background: #F2F2F2;
   border-radius: 3px;
+  min-height: 300px;
   height: fit-content;
   margin: 20px auto;
   opacity: 0.7;
@@ -74,6 +75,20 @@ form button{
   display: grid;
   grid-template-columns: 1fr 4fr;
   padding: 5px;
+}
+
+#logInLogOut {
+  margin: 10px 5px;
+  padding: 10px;
+}
+
+#logInLogOut a {
+  text-decoration: none;
+  font-size: 14px;
+}
+
+#logInLogOut a:hover {
+  color: blue;
 }
 
 .navbar{
