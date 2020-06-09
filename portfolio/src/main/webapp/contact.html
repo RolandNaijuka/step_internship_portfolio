@@ -40,12 +40,10 @@
 			</div>
 			<button role="submit" name="commentButton">Submit</button>
 		</form>
-		<form>
-			<div>
-				<label>Number of Comments: </label>
-				<input type="number" min="0" max="50" id="numComments" onchange="updateNumComments();">
-      		</div>
-		</form>
+		<div>
+			<label>Number of Comments: </label>
+			<input type="number" min="0" max="50" id="numComments" onchange="updateNumComments();">
+		</div>
 		<button onclick="deleteComments();">Delete Comments</button>
 		<div id="user-comments">
 
