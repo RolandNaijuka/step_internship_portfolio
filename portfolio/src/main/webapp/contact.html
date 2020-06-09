@@ -24,8 +24,8 @@
 	</nav>
 
 	<div class="contact-me">
-		<h1>Contact Me!</h1>
 		<form id="comment-form" method="POST" enctype="multipart/form-data">
+	    <h1>Contact Me!</h1>
 			<div class="form-content">
 				<label for="name">Name</label>
 				<input type="text" name="name" id="name" placeholder="optional"><br>
@@ -40,17 +40,15 @@
       </div>
       <button role="submit" name="commentButton">Submit</button>
 		</form>
-		<form>
-			<div>
-				<label>Number of Comments: </label>
-				<input type="number" min="0" max="50" id="numComments" onchange="updateNumComments();">
-      </div>
-		</form>
-		<button onclick="deleteComments();">Delete Comments</button>
-		<div id="user-comments">
 
-		</div>
-
+    <div id="logInLogOut"></div>
+    
+    <div id="display-comments">
+      <label>Number of Comments: </label>
+      <input type="number" min="0" max="50" id="numComments" onchange="updateNumComments();"><br>
+      <button onclick="deleteComments();">Delete Comments</button>
+      <div id="user-comments"></div>
+	  </div>
 	</div>
 </body>
 
