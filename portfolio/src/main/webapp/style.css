@@ -135,8 +135,9 @@ form button{
   visibility: visible;
 }
 
-#user-comments{
-  display: none;
+#user-comments img {
+  height: 250px;
+  width: 250px;
 }
 
 

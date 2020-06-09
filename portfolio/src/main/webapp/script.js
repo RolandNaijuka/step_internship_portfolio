@@ -35,7 +35,7 @@ function updateNumComments() {
 /* Retrieve user comments and display them */
 async function getUserComments(numComments=MAX_COMMENTS) {
   try {
-    const response = await fetch(`/${await fetchBlobUrl()}?numComments=${numComments}`);
+    const response = await fetch(`/data?numComments=${numComments}`);
     const data = await response.json();
 
     const commentEl = document.querySelector("#user-comments");
@@ -44,6 +44,7 @@ async function getUserComments(numComments=MAX_COMMENTS) {
 
         for(let comment in data) {
           commentEl.appendChild(createElement(data[comment]));
+          commentEl.appendChild(createImgElement(data[comment]));
         }
     }
   } catch(error) {
@@ -72,8 +73,9 @@ async function fetchBlobUrl() {
 }
 
 /** Set the action attribute value in the comments' form */
-function setActionAttr() {
+async function setActionAttr() {
   const commentsForm = document.querySelector("#comment-form");
+
   if(commentsForm){
     commentsForm.action = fetchBlobUrl();
   }
@@ -85,6 +87,15 @@ function createElement(comment) {
   pElement.innerHTML = `${comment.name}: ${comment.comment}`;
   return pElement;
 }
+
+/** create img element to display the image submitted by user */
+function createImgElement(comment){
+  const imgElement = document.createElement('IMG');
+  imgElement.setAttribute("src", `${comment.imageUrl}`);
+  imgElement.setAttribute("alt", "Image uploaded by user");
+  return imgElement;
+}
+
 
 /** Change the innerHTML to a greeting and name every time use loads or refreshes */
 async function loadContent() {
