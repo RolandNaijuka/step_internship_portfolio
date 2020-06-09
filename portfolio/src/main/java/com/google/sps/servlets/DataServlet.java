@@ -19,6 +19,8 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.data.Comment;
 import java.io.IOException;
@@ -33,7 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 public class DataServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      
+    // get the number of MAX comments to display
     int numComments;
     try {
       numComments = Integer.parseInt(request.getParameter("numComments"));
@@ -41,8 +43,10 @@ public class DataServlet extends HttpServlet {
       // Default number of comments
       numComments = 5;
     }
+    UserService userService = UserServiceFactory.getUserService();
+    String emailAddress = userService.getCurrentUser().getEmail();
 
-    Query query = new Query("Comments");
+    Query query = new Query("Comments").setFilter(new Query.FilterPredicate("emailAddress", Query.FilterOperator.EQUAL, emailAddress));
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
     
