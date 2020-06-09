@@ -86,10 +86,7 @@ function createElement(comment) {
   return pElement;
 }
 
-/**
-* Change the innerHTML to a greeting and name
-* every time use loads or refreshes
-*/
+/** Change the innerHTML to a greeting and name every time use loads or refreshes */
 async function loadContent() {
   setActionAttr();
   updateNumComments();
