@@ -43,13 +43,14 @@ async function getUserComments(numComments=MAX_COMMENTS) {
         commentEl.innerText = "";
 
         for(let comment in data) {
-          commentEl.appendChild(createElement(data[comment]));
+          commentEl.appendChild(createElement(`${comment.name}: ${comment.comment}`));
           commentEl.appendChild(createImgElement(data[comment]));
         }
     }
   } catch(err) {
     console.log("There was an error loading comments!");
   }
+  
 }
 
 /* Delete all the comments from the server */
@@ -81,9 +82,9 @@ async function setActionAttr() {
 }
 
 /** Creates an <p> element containing comments. */
-function createElement(comment) {
+function createElement(text) {
   const pElement = document.createElement('p');
-  pElement.innerHTML = `${comment.name}: ${comment.comment}`;
+  pElement.appendChild(document.createTextNode(text));
   return pElement;
 }
 
@@ -95,15 +96,57 @@ function createImgElement(comment){
   return imgElement;
 }
 
-/**
-* Change the innerHTML to a greeting and name
-* every time use loads or refreshes
+/** Check whether the user is logged in */
+async function checkIfUserIsLoggedIn(){
+  const commentsForm = document.getElementById('comment-form');
+  const logInLogOutDiv = document.getElementById('logInLogOut');
+
+  //set display of form and login div to none
+  commentsForm.style.display = "none";
+
+  // fetch the data that represents the login status of the user
+  const response = await fetch("/login");
+  const logInInfo = await response.json();
+
+  console.log(logInInfo);
+
+  // show the login or login link depending on whether the user is logged in
+  if(logInInfo.isLoggedIn){
+    commentsForm.style.display="block";
+    logInLogOutDiv.innerHTML = '';
+    logInLogOutDiv.appendChild(createElement(`Email Address: ${logInInfo.emailAddress}`));
+    logInLogOutDiv.appendChild(createAchorElement("Logout here",logInInfo.logUrl));
+
+    setActionAttr();
+    updateNumComments();
+  } else {
+    logInLogOutDiv.innerHTML = '';
+    logInLogOutDiv.appendChild(createAchorElement("Login here to add comments",logInInfo.logUrl));
+  }
+
+  //set the display of the elements that depends on comments similar to one of commentsForm
+  const displayCommentsDiv = document.getElementById("display-comments");
+  displayCommentsDiv.style.display = commentsForm.style.display;
+}
+
+
+/* Creates an <a> element containing text 
+ * @param text - String to display the destination of the link
+ * @param url - url for the href attribute of the link
 */
-async function loadContent() {
-  console.log(await fetchBlobUrl());
-  await setActionAttr();
-  
-  updateNumComments();
+function createAchorElement(text,url) {
+  const aElement = document.createElement('a');
+  aElement.appendChild(document.createTextNode(text));
+  aElement.title = text;
+  aElement.href = url;
+  return aElement;
+}
+
+/**
+* Change the innerHTML to a greeting and name every time use loads or refreshes
+*/
+function loadContent() {
+  checkIfUserIsLoggedIn();
   const greetingEl = document.getElementById("welcome-note")
   if(typeof(greetingEl) != 'undefined' && greetingEl != null) {
     greetingEl.innerHTML = `${generateRandomGreeting()} My name is Roland`;
