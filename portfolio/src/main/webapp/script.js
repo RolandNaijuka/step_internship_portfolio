@@ -39,7 +39,7 @@ async function getUserComments(numComments=MAX_COMMENTS) {
     const data = await response.json();
 
     const commentEl = document.querySelector("#user-comments");
-    if(typeof(commentEl) != 'undefined' && commentEl != null) {
+    if(commentEl) {
         commentEl.innerText = "";
 
         for(let comment in data) {
@@ -47,8 +47,8 @@ async function getUserComments(numComments=MAX_COMMENTS) {
           commentEl.appendChild(createImgElement(data[comment]));
         }
     }
-  } catch(err) {
-    console.log("There was an error loading comments!");
+  } catch(error) {
+    console.error("There was an error loading comments: ", error);
   }
 }
 
@@ -75,8 +75,9 @@ async function fetchBlobUrl() {
 /** Set the action attribute value in the comments' form */
 async function setActionAttr() {
   const commentsForm = document.querySelector("#comment-form");
-  if(typeof(commentsForm) != 'undefined' && commentsForm != null){
-    commentsForm.action = await fetchBlobUrl();
+
+  if(commentsForm){
+    commentsForm.action = fetchBlobUrl();
   }
 }
 
@@ -95,17 +96,13 @@ function createImgElement(comment){
   return imgElement;
 }
 
-/**
-* Change the innerHTML to a greeting and name
-* every time use loads or refreshes
-*/
+
+/** Change the innerHTML to a greeting and name every time use loads or refreshes */
 async function loadContent() {
-  console.log(await fetchBlobUrl());
-  await setActionAttr();
-  
+  setActionAttr();
   updateNumComments();
-  const greetingEl = document.getElementById("welcome-note")
-  if(typeof(greetingEl) != 'undefined' && greetingEl != null) {
+  const greetingEl = document.getElementById("welcome-note");
+  if(greetingEl) {
     greetingEl.innerHTML = `${generateRandomGreeting()} My name is Roland`;
   }
 }
