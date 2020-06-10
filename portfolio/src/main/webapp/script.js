@@ -43,7 +43,7 @@ async function getUserComments(numComments=MAX_COMMENTS) {
         commentEl.innerText = "";
 
         for(let comment in data) {
-          commentEl.appendChild(createElement(`${comment.name}: ${comment.comment}`));
+          commentEl.appendChild(createElement(`${data[comment].name}: ${data[comment].comment}`));
           commentEl.appendChild(createImgElement(data[comment]));
         }
     }
@@ -78,7 +78,7 @@ async function setActionAttr() {
   const commentsForm = document.querySelector("#comment-form");
 
   if(commentsForm){
-    commentsForm.action = fetchBlobUrl();
+    commentsForm.action = await fetchBlobUrl();
   }
 }
 
@@ -118,7 +118,7 @@ async function checkIfUserIsLoggedIn(){
     logInLogOutDiv.appendChild(createElement(`Email Address: ${logInInfo.emailAddress}`));
     logInLogOutDiv.appendChild(createAchorElement("Logout here",logInInfo.logUrl));
 
-    setActionAttr();
+    await setActionAttr();
     updateNumComments();
   } else {
     logInLogOutDiv.innerHTML = '';
@@ -144,8 +144,8 @@ function createAchorElement(text,url) {
 }
 
 /** Change the innerHTML to a greeting and name every time use loads or refreshes */
-function loadContent() {
-  checkIfUserIsLoggedIn();
+async function loadContent() {
+  await checkIfUserIsLoggedIn();
   const greetingEl = document.getElementById("welcome-note")
   if(greetingEl) {
     greetingEl.innerHTML = `${generateRandomGreeting()} My name is Roland`;
