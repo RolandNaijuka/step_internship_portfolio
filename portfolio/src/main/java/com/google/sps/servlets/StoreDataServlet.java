@@ -24,6 +24,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.ImagesServiceFailureException;
 import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -40,8 +41,6 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that stores data from the client */
 @WebServlet("/store-data")
 public class StoreDataServlet extends HttpServlet {
-  private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-
   /**
    * This method receives the client's request to post data and redirects them when there is success.
    * The client will be redirected to the contact.html page
@@ -68,7 +67,7 @@ public class StoreDataServlet extends HttpServlet {
       return;
     }
     // store the client's email address alongside their comments for better querying of individual comments
-    Entity commentEntity = new Entity("Comments", emailAddress);
+    Entity commentEntity = new Entity("Comments");
     commentEntity.setProperty("name",username);
     commentEntity.setProperty("comment",comment);
     commentEntity.setProperty("imageUrl",imageUrl);
@@ -98,7 +97,7 @@ public class StoreDataServlet extends HttpServlet {
    * @return the URL that points to the uploaded file or null if the client didn't upload a file
    */
   private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
-    
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get(formInputElementName);
 
@@ -125,10 +124,10 @@ public class StoreDataServlet extends HttpServlet {
     // To support running in Google Cloud Shell with AppEngine's devserver, we must use the relative
     // path to the image, rather than the path returned by imagesService which contains a host.
     try {
-      URL url = new URL(imagesService.getServingUrl(options));
-      return url.getPath();
-    } catch (MalformedURLException e) {
+      //URL url = new URL(imagesService.getServingUrl(options));
       return imagesService.getServingUrl(options);
+    } catch (ImagesServiceFailureException e) {
+      return null;
     }
   }
 }

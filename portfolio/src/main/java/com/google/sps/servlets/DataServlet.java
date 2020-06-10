@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
   //initialize the number of comments here so that the system always remembers even after refreshing with default 5
-  int numComments = 5;
+  int numComments;
 
   /**
    * This method receives a client's request for their comments data and responds with a json with the data
@@ -48,6 +48,7 @@ public class DataServlet extends HttpServlet {
     try {
       numComments = Integer.parseInt(request.getParameter("numComments"));
     } catch (NumberFormatException e) {
+      numComments = 5;
       System.err.println("This is the error: "+e);
     }
 

@@ -23,6 +23,8 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions.Builder;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.annotation.WebServlet;
@@ -42,7 +44,12 @@ public class DeleteDataServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-    Query query = new Query("Comments");
+    // get the email of the client
+    UserService userService = UserServiceFactory.getUserService();
+    String emailAddress = userService.getCurrentUser().getEmail();
+
+    // Make sure to delete the comments for the current user only
+    Query query = new Query("Comments").setFilter(new Query.FilterPredicate("emailAddress", Query.FilterOperator.EQUAL, emailAddress));;
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
