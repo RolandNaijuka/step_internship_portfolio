@@ -33,6 +33,9 @@ async function checkIfUserIsLoggedIn() {
     logInLogOutDiv.innerHTML = '';
     logInLogOutDiv.appendChild(createParagraphElement(`Email Address: ${logInInfo.emailAddress}`));
     logInLogOutDiv.appendChild(createAchorElement('Logout here', logInInfo.logUrl));
+
+    // load the comments of the user
+    updateNumComments();
   } else {
     logInLogOutDiv.innerHTML = '';
     logInLogOutDiv.appendChild(createAchorElement('Login here to add comments', logInInfo.logUrl));
@@ -99,11 +102,12 @@ async function deleteComments() {
 /** 
  * Retrieve the url for the posting the comments section form and store it
  * @async
- * @returns {JSON} containing the url where to send the form
+ * @returns {String} containing the url where to send the form
  */
 async function fetchBlobUrl() {
   const request = await fetch('/blobstore-upload-url');
-  return await request.text();
+  const urlLink =  await request.text();
+  return urlLink;
 }
 
 /** 
@@ -151,27 +155,31 @@ function generateRandomGreeting() {
  */
 function updateNumComments() {
   const userNumComments = document.getElementById('numComments').value;
-  getUserComments(userNumComments);
+  if (userNumComments) {
+    getUserComments(userNumComments);
+  } else {
+    getUserComments();
+  }
+  
 }
 
 /**
  * Set the action attribute value in the comments' form 
+ * @async
  */
-function setActionAttribute() {
+async function setActionAttribute() {
   const userCommentsForm = document.getElementById('comment-form');
   if (userCommentsForm) {
-    userCommentsForm.action = fetchBlobUrl();
+    userCommentsForm.action = await fetchBlobUrl();
   }
 }
 
 /**
  * Change the innerHTML to a greeting and name every time use loads or refreshes
- * @async
  */
-async function loadContent() {
-  await checkIfUserIsLoggedIn();
+function loadContent() {
+  checkIfUserIsLoggedIn();
   setActionAttribute();
-  updateNumComments();
   const greetingsElement = document.getElementById('welcome-note');
   /** check to make sure that there is @var greetingsElement on the current page before displaying the greeting */
   if (greetingsElement) {
