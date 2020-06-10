@@ -33,8 +33,8 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-  //initialize the number of comments here so that the system always remembers even after refreshing
-  int numComments;
+  //initialize the number of comments here so that the system always remembers even after refreshing with default 5
+  int numComments = 5;
 
   /**
    * This method receives a client's request for their comments data and responds with a json with the data
@@ -48,8 +48,7 @@ public class DataServlet extends HttpServlet {
     try {
       numComments = Integer.parseInt(request.getParameter("numComments"));
     } catch (NumberFormatException e) {
-      // Default number of comments
-      numComments = 5;
+      System.err.println("This is the error: "+e);
     }
 
     // get the email of the client
