@@ -30,18 +30,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** 
- * Servlet responsible for deleting tasks.
- */
+/** Servlet responsible for deleting tasks. */
 @WebServlet("/delete-data")
 public class DeleteDataServlet extends HttpServlet {
 
   /**
-    * This method receives the client's requests to post data and redirects them when there is success.
-    * The client will receive a blobstore url for uploading an image
-    * @param request This holds the HttpServletRequest from the client
-    * @param response This holds the HttpServletResponse which is sent to the client. This is a redirection to the contact.html page.
-    */
+   * This method receives the client's requests to post data and redirects them when there is success.
+   * The client will receive a blobstore url for uploading an image
+   * @param request This holds the HttpServletRequest from the client
+   * @param response This holds the HttpServletResponse which is sent to the client. This is a redirection to the contact.html page.
+   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
     Query query = new Query("Comments");
@@ -50,7 +48,7 @@ public class DeleteDataServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
 
     // Delete all the comments in the database one at a time
-    for(Entity entity: results.asIterable()){
+    for (Entity entity: results.asIterable()) {
       datastore.delete(entity.getKey());
     }
     response.sendRedirect("/contact.html");

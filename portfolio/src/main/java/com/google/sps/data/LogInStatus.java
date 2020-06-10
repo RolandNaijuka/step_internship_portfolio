@@ -18,22 +18,15 @@ package com.google.sps.data;
  * LogInStatus is a class for holding the login status of the user on the website
  * Creates an instance which tells us about the status of whether user is logged in or not 
  */
-public class LogInStatus{
+public class LogInStatus {
 
-  /** 
-   * A string which holds the email address of the User who is logged in.
-   * {@code emailAddress} is "none" when the user is not logged in
-   */
+  // A string which holds the email address of the User who is logged in. It is "none" when the user is not logged in
   private String emailAddress;
   
-  /**
-   * A boolean which defines the status of whether user is logged in or not
-   */
+  // A boolean which defines the status of whether user is logged in or not
   private boolean isLoggedIn;
 
-  /*
-   * A url string which redirects user to either log in or log out page, depending on their status
-   */
+  // A url string which redirects user to either log in or log out page, depending on their status
   private String logUrl;
 
   /**
@@ -42,7 +35,7 @@ public class LogInStatus{
    * @param isLoggedIn This is true as the user is logged in
    * @param logUrl A string that holds the url where the user is redirected to
    */
-  public LogInStatus(String emailAddress, String logUrl){
+  public LogInStatus(String emailAddress, String logUrl) {
     this.emailAddress = emailAddress;
     this.isLoggedIn = true;
     this.logUrl = logUrl;
@@ -54,7 +47,7 @@ public class LogInStatus{
    * @param isLoggedIn This is false as the user is not logged in
    * @param logUrl A string that holds the url where the user is redirected to
    */
-  public LogInStatus(String logUrl){
+  public LogInStatus(String logUrl) {
     this.emailAddress = "none";
     this.isLoggedIn = false;
     this.logUrl = logUrl;

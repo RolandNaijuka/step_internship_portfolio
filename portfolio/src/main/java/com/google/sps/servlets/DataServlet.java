@@ -33,25 +33,36 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
+  //initialize the number of comments here so that the system always remembers even after refreshing
+  int numComments;
+
+  /**
+   * This method receives a client's request for their comments data and responds with a json with the data
+   * @param request This holds the client's HttpServletRequest information for the number of comments to display
+   * @param response This holds the server's HttpServletResponse to the client's request
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    
     // get the number of MAX comments to display
-    int numComments;
     try {
       numComments = Integer.parseInt(request.getParameter("numComments"));
-    } catch(NumberFormatException e) {
+    } catch (NumberFormatException e) {
       // Default number of comments
       numComments = 5;
     }
+
+    // get the email of the client
     UserService userService = UserServiceFactory.getUserService();
     String emailAddress = userService.getCurrentUser().getEmail();
 
+    // Use the client's email to filter the comments when querying
     Query query = new Query("Comments").setFilter(new Query.FilterPredicate("emailAddress", Query.FilterOperator.EQUAL, emailAddress));
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
     
     ArrayList<Comment> userComments = new ArrayList<>();
-    for(Entity entity: results.asIterable()) {
+    for (Entity entity: results.asIterable()) {
       long id = entity.getKey().getId();
       String username = (String) entity.getProperty("name");
       String comment = (String) entity.getProperty("comment");
@@ -59,8 +70,8 @@ public class DataServlet extends HttpServlet {
       
       Comment userComment =  new Comment(id, username, comment, imageUrl);
       
-      // Do not exceed max number of comments to display
-      if(userComments.size() >= numComments) {
+      // Do not exceed max number of comments to display, {@param userComments} will be zero if the user doesn't want to display any comments
+      if (userComments.size() >= numComments) {
         break;
       }
 
