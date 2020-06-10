@@ -1,13 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Crimson+Text&display=swap');
 
-body{
+body {
   background-color : rgb(17, 15, 15);
   color: #fcf4f4;
   margin: 0 auto;
   max-width: 800px;
 }
 
-.contact-me{
+#comment-form, #display-comments {
+  display: none;
+}
+
+.contact-me {
   color: black;
   background: #F2F2F2;
   border-radius: 0.188rem;
@@ -25,42 +29,42 @@ body{
   margin: 30% auto 0px;
 }
 
-.content-body{
+.content-body {
   align-self: center;
   left: 20px;
   padding: 10px 25px;
   position: relative;
 }
 
-.content-body > h1{
+.content-body > h1 {
   font-size: 2rem;
 }
 
-.content-body .main-content-body{
+.content-body .main-content-body {
   font-size: 1.375rem;
 }
 
-.content-body > p{
+.content-body > p {
   font-size: 1rem;
 }
 
-.content-image{
+.content-image {
   align-self: center;
   text-align: center;
 }
 
-.content-image img{
+.content-image img {
   border-radius: 50%;
   height: 200px;
   width: 200px;
 }
 
-.content-image > p{
+.content-image > p {
   color: rgb(226, 241, 255) !important;
   opacity: 0.5;
 }
 
-form button{
+form button {
   background: rgb(39, 162, 233);
   border: 1px solid black;
   border-style: outset;
@@ -69,7 +73,7 @@ form button{
   text-shadow: none;
 }
 
-.form-content{
+.form-content {
   align-items: flex-start;
   display: grid;
   grid-template-columns: 1fr 4fr;
@@ -90,13 +94,13 @@ form button{
   color: blue;
 }
 
-.navbar{
+.navbar {
   display: grid;
   font-size: 1.25rem;
   grid-auto-flow: column;
 }
 
-.nav-button{
+.nav-button {
   background-color: inherit;
   border: none;
   color: inherit;
@@ -108,11 +112,11 @@ form button{
   text-decoration: none;
 }
 
-.nav-left-side{
+.nav-left-side {
   align-self: flex-start;
 }
 
-.navbar .navbar-item{
+.navbar .navbar-item {
   border: none;
   display: block;
   float: left;
@@ -120,17 +124,17 @@ form button{
   width: auto;
 }
 
-.nav-right-side{
+.nav-right-side {
   justify-self: center;
   margin-left: 150px;
 }
 
-.nav-right-side img{
+.nav-right-side img {
   width: 24px;
   height: 24px;
 }
 
-.tooltip ~ #tooltipText{
+.tooltip ~ #tooltipText {
   background-color: rgba(255, 255, 255, 0.952);
   border-radius: 6px;
   color: rgba(11, 11, 165, 0.507);
@@ -144,7 +148,7 @@ form button{
   z-index: 100;
 }
 
-.tooltip:hover ~ #tooltipText{
+.tooltip:hover ~ #tooltipText {
   visibility: visible;
 }
 
@@ -154,7 +158,7 @@ form button{
 }
 
 
-.wrapper{
+.wrapper {
   display: grid;
   grid-template-rows: 2fr 2fr;
   grid-template-columns: 1fr 1fr;
@@ -163,7 +167,7 @@ form button{
   width: 100%;
 }
 
-.wrapper .works-item a{
+.wrapper .works-item a {
   background:#F2F2F2;
   color: black;
   display: grid;
@@ -179,16 +183,16 @@ form button{
   text-decoration: none;
 }
 
-.wrapper .works-item a:hover{
+.wrapper .works-item a:hover {
   top: -10px;
 }
 
-.wrapper .works-item a .description{
+.wrapper .works-item a .description {
   font-size: 0.813rem;
   padding: 5px;
 }
 
-.wrapper .works-item a h3{
+.wrapper .works-item a h3 {
   font-size: 1.25rem;
   font-family: 'Crimson Text', serif;
   font-weight: bold;
@@ -198,12 +202,12 @@ form button{
   width: 80%;
 }
 
-.wrapper .works-item img{
+.wrapper .works-item img {
   height: 100%;
   width: 100%;
 }
 
-.wrapper .works-item #code-book-title{
+.wrapper .works-item #code-book-title {
   float: left;
 }
 
