@@ -14,31 +14,49 @@
 
 package com.google.sps.data;
 
-/** Creates an instance which tells us about the status of whether user is logged in or not */
+/**
+ * LogInStatus is a class for holding the login status of the user on the website
+ * Creates an instance which tells us about the status of whether user is logged in or not 
+ */
 public class LogInStatus{
 
-  /* The email address of the User who is logged in
-   * This is not null when the user is logged in
+  /** 
+   * A string which holds the email address of the User who is logged in.
+   * {@code emailAddress} is "none" when the user is not logged in
    */
   private String emailAddress;
   
-  /* Defines the status of whether user is logged in or not */
+  /**
+   * A boolean which defines the status of whether user is logged in or not
+   */
   private boolean isLoggedIn;
 
-  /* Redirects user to log in or log out page, depending on their status */
+  /*
+   * A url string which redirects user to either log in or log out page, depending on their status
+   */
   private String logUrl;
 
-  /* Creates an instance when user is logged in */
-  public LogInStatus(String emailAddress, boolean isLoggedIn, String logUrl){
+  /**
+   * Creates an instance when user is logged in
+   * @param emailAddress The email address of the user who is logged in
+   * @param isLoggedIn This is true as the user is logged in
+   * @param logUrl A string that holds the url where the user is redirected to
+   */
+  public LogInStatus(String emailAddress, String logUrl){
     this.emailAddress = emailAddress;
-    this.isLoggedIn = isLoggedIn;
+    this.isLoggedIn = true;
     this.logUrl = logUrl;
   }
 
-  /* Creates an instance when user is not logged in */
-  public LogInStatus(boolean isLoggedIn, String logUrl){
+  /**
+   * Creates an instance when user is not logged in
+   * @param emailAddress The email address is none here because the user is not logged in
+   * @param isLoggedIn This is false as the user is not logged in
+   * @param logUrl A string that holds the url where the user is redirected to
+   */
+  public LogInStatus(String logUrl){
     this.emailAddress = "none";
-    this.isLoggedIn = isLoggedIn;
+    this.isLoggedIn = false;
     this.logUrl = logUrl;
   }
 }
