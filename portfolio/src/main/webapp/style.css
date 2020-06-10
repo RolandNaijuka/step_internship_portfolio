@@ -1,21 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Crimson+Text&display=swap');
 
 body{
-  background-color: rgb(17, 15, 15);
+  background-color : rgb(17, 15, 15);
   color: #fcf4f4;
-  margin:0 auto;
+  margin: 0 auto;
   max-width: 800px;
 }
 
 .contact-me{
   color: black;
   background: #F2F2F2;
-  border-radius: 3px;
-  min-height: 300px;
+  border-radius: 0.188rem;
+  min-height: 18.75rem;
   height: fit-content;
-  margin: 20px auto;
+  margin: 1.25rem auto;
   opacity: 0.7;
-  width: 500px;
+  width: 31.25rem;
 }
 
 .content {
@@ -33,15 +33,15 @@ body{
 }
 
 .content-body > h1{
-  font-size: 32px;
+  font-size: 2rem;
 }
 
 .content-body .main-content-body{
-  font-size: 22px;
+  font-size: 1.375rem;
 }
 
 .content-body > p{
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 .content-image{
@@ -83,7 +83,7 @@ form button{
 
 #logInLogOut a {
   text-decoration: none;
-  font-size: 14px;
+  font-size: 1.063rem;
 }
 
 #logInLogOut a:hover {
@@ -92,22 +92,20 @@ form button{
 
 .navbar{
   display: grid;
-  font-size: 20px;
+  font-size: 1.25rem;
   grid-auto-flow: column;
 }
 
 .nav-button{
-  background-color:inherit;
-  border:none;
-  color:inherit;
-  cursor:pointer;
-  display:inline-block;
-  overflow:hidden;
-  padding:8px 16px;
-  text-align:center;
-  text-decoration:none;
-  vertical-align:middle;
-  white-space:nowrap
+  background-color: inherit;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
 }
 
 .nav-left-side{
@@ -115,11 +113,11 @@ form button{
 }
 
 .navbar .navbar-item{
-  border:none;
-  display:block;
-  float:left;
-  padding:8px 16px;
-  width:auto;
+  border: none;
+  display: block;
+  float: left;
+  padding: 8px 16px;
+  width: auto;
 }
 
 .nav-right-side{
@@ -186,12 +184,12 @@ form button{
 }
 
 .wrapper .works-item a .description{
-  font-size: 13px;
+  font-size: 0.813rem;
   padding: 5px;
 }
 
 .wrapper .works-item a h3{
-  font-size: 20px;
+  font-size: 1.25rem;
   font-family: 'Crimson Text', serif;
   font-weight: bold;
   height: 70px;
