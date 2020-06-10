@@ -15,140 +15,167 @@
 // default max comments to display
 let MAX_COMMENTS = 5;
 
-/** Generate a random greeting */
+/** 
+ * checks whether the user is logged in and display the information according to the user's status 
+ * @async
+ */
+async function checkIfUserIsLoggedIn() {
+  const userCommentsForm = document.getElementById('comment-form');
+  const logInLogOutDiv = document.getElementById('logInLogOut');
+
+  // fetch the data that represents the login status of the user
+  const response = await fetch('/login');
+  const logInInfo = await response.json();
+
+  // show the login or login link depending on whether the user is logged in
+  if (logInInfo.isLoggedIn) {
+    userCommentsForm.style.display = 'block';
+    logInLogOutDiv.innerHTML = '';
+    logInLogOutDiv.appendChild(createParagraphElement(`Email Address: ${logInInfo.emailAddress}`));
+    logInLogOutDiv.appendChild(createAchorElement('Logout here', logInInfo.logUrl));
+  } else {
+    logInLogOutDiv.innerHTML = '';
+    logInLogOutDiv.appendChild(createAchorElement('Login here to add comments', logInInfo.logUrl));
+  }
+
+  /** set the display of the elements that depends on comments similar to the one for @var userCommentsForm */
+  const displayCommentsDiv = document.getElementById('display-comments');
+  displayCommentsDiv.style.display = userCommentsForm.style.display;
+}
+
+/**
+ * Creates an <a> element containing text 
+ * @param {String} text holds the destination of the link
+ * @param {String} url - url for the href attribute of the link
+ * @returns {HTMLAnchorElement} with the text and url
+ */
+function createAchorElement(text, url) {
+  const anchorElement = document.createElement('a');
+  anchorElement.appendChild(document.createTextNode(text));
+  anchorElement.title = text;
+  anchorElement.href = url;
+  return anchorElement;
+}
+
+/** 
+ * create img element to display the image submitted by user
+ * @param {String} imageUrl - String that holds the source url for the image submitted by the user
+ * @returns {HTMLImageElement} containing the image uploaded by the user
+ */
+function createImgElement(imageUrl) {
+  const imgElement = document.createElement('IMG');
+  imgElement.setAttribute('src', imageUrl);
+  imgElement.setAttribute('alt', 'Image uploaded by user');
+  return imgElement;
+}
+
+/**
+ * Creates an <p> element containing comments.
+ * @param {String} text holds the paragraph text you would like to create
+ * @returns {HTMLParagraphElement} element with the {@param text} as the inner text for the paragraph
+ */
+function createParagraphElement(text) {
+  const paragraphElement = document.createElement('p');
+  paragraphElement.appendChild(document.createTextNode(text));
+  return paragraphElement;
+}
+
+/**
+ * Delete all the comments from the server
+ * @async
+ */
+async function deleteComments() {
+  try {
+    await fetch('/delete-data', {
+      method: 'POST'
+    });
+  } catch (error) {
+    alert('Try again!');
+  } finally {
+    updateNumComments();
+  }
+}
+
+/** 
+ * Retrieve the url for the posting the comments section form and store it
+ * @async
+ * @returns {JSON} containing the url where to send the form
+ */
+async function fetchBlobUrl() {
+  const request = await fetch('/blobstore-upload-url');
+  return await request.text();
+}
+
+/** 
+ * Retrieve user comments and display them
+ * @async
+ * @param {number} numComments the maximum number of comments that the user wants to display
+ * @var {number} MAX_COMMENTS the default number of comments that will be displayed if the user does not choose a number
+ */
+async function getUserComments(numComments = MAX_COMMENTS) {
+  try {
+    const response = await fetch(`/data?numComments=${numComments}`);
+    const data = await response.json();
+
+    const displayUserCommentsElement = document.getElementById('user-comments');
+    /** check to make sure that there is @var displayUserCommentsElement on the current page before displaying the comments*/
+    if (displayUserCommentsElement) {
+      displayUserCommentsElement.innerText = '';
+
+      for (let comment in data) {
+        displayUserCommentsElement.appendChild(createParagraphElement(`${data[comment].name}: ${data[comment].comment}`));
+        displayUserCommentsElement.appendChild(createImgElement(data[comment].imageUrl));
+      }
+    }
+  } catch (error) {
+    console.error('There was an error loading comments: ', error);
+  }
+}
+
+/**
+ * Generate a random greeting
+ * @returns {String} a greeting from the list
+ */
 function generateRandomGreeting() {
   //TODO use google translated to get greetings in different languages
   const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+    ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
 
   // Pick a random greeting.
   const greeting = greetings[Math.floor(Math.random() * greetings.length)];
   return greeting;
 }
 
-/* Update the MAX_COMMENTS */
+/**
+ * Get the user's maximum if they type the number in the input field
+ */
 function updateNumComments() {
-  const userNumComments = document.querySelector("#numComments").value;
+  const userNumComments = document.getElementById('numComments').value;
   getUserComments(userNumComments);
 }
 
-/* Retrieve user comments and display them */
-async function getUserComments(numComments=MAX_COMMENTS) {
-  try {
-    const response = await fetch(`/data?numComments=${numComments}`);
-    const data = await response.json();
-
-    const commentEl = document.querySelector("#user-comments");
-    if(commentEl) {
-        commentEl.innerText = "";
-
-        for(let comment in data) {
-          commentEl.appendChild(createElement(`${data[comment].name}: ${data[comment].comment}`));
-          commentEl.appendChild(createImgElement(data[comment]));
-        }
-    }
-  } catch(error) {
-    console.error("There was an error loading comments: ", error);
-  }
-  
-}
-
-/* Delete all the comments from the server */
-async function deleteComments() {
-  try {
-    await fetch("/delete-data", {
-        method: "POST"
-    });
-  } catch(error) {
-    alert("Try again!");
-  } finally {
-    updateNumComments();
+/**
+ * Set the action attribute value in the comments' form 
+ */
+function setActionAttribute() {
+  const userCommentsForm = document.getElementById('comment-form');
+  if (userCommentsForm) {
+    userCommentsForm.action = fetchBlobUrl();
   }
 }
 
-/* Retrieve the url for the posting the comments section form and store it */
-async function fetchBlobUrl() {
-  const request = await fetch("/blobstore-upload-url");
-  // TODO get the relative link
-  return await request.text();
-}
-
-/** Set the action attribute value in the comments' form */
-async function setActionAttr() {
-  const commentsForm = document.querySelector("#comment-form");
-
-  if(commentsForm){
-    commentsForm.action = await fetchBlobUrl();
-  }
-}
-
-/** Creates an <p> element containing comments. */
-function createElement(text) {
-  const pElement = document.createElement('p');
-  pElement.appendChild(document.createTextNode(text));
-  return pElement;
-}
-
-/** create img element to display the image submitted by user */
-function createImgElement(comment){
-  const imgElement = document.createElement('IMG');
-  imgElement.setAttribute("src", `${comment.imageUrl}`);
-  imgElement.setAttribute("alt", "Image uploaded by user");
-  return imgElement;
-}
-
-/** Check whether the user is logged in */
-async function checkIfUserIsLoggedIn(){
-  const commentsForm = document.getElementById('comment-form');
-  const logInLogOutDiv = document.getElementById('logInLogOut');
-
-  //set display of form and login div to none
-  commentsForm.style.display = "none";
-
-  // fetch the data that represents the login status of the user
-  const response = await fetch("/login");
-  const logInInfo = await response.json();
-
-  console.log(logInInfo);
-
-  // show the login or login link depending on whether the user is logged in
-  if(logInInfo.isLoggedIn){
-    commentsForm.style.display="block";
-    logInLogOutDiv.innerHTML = '';
-    logInLogOutDiv.appendChild(createElement(`Email Address: ${logInInfo.emailAddress}`));
-    logInLogOutDiv.appendChild(createAchorElement("Logout here",logInInfo.logUrl));
-
-    await setActionAttr();
-    updateNumComments();
-  } else {
-    logInLogOutDiv.innerHTML = '';
-    logInLogOutDiv.appendChild(createAchorElement("Login here to add comments",logInInfo.logUrl));
-  }
-
-  //set the display of the elements that depends on comments similar to one of commentsForm
-  const displayCommentsDiv = document.getElementById("display-comments");
-  displayCommentsDiv.style.display = commentsForm.style.display;
-}
-
-
-/* Creates an <a> element containing text 
- * @param text - String to display the destination of the link
- * @param url - url for the href attribute of the link
-*/
-function createAchorElement(text,url) {
-  const aElement = document.createElement('a');
-  aElement.appendChild(document.createTextNode(text));
-  aElement.title = text;
-  aElement.href = url;
-  return aElement;
-}
-
-/** Change the innerHTML to a greeting and name every time use loads or refreshes */
+/**
+ * Change the innerHTML to a greeting and name every time use loads or refreshes
+ * @async
+ */
 async function loadContent() {
   await checkIfUserIsLoggedIn();
-  const greetingEl = document.getElementById("welcome-note")
-  if(greetingEl) {
-    greetingEl.innerHTML = `${generateRandomGreeting()} My name is Roland`;
+  setActionAttribute();
+  updateNumComments();
+  const greetingsElement = document.getElementById('welcome-note');
+  /** check to make sure that there is @var greetingsElement on the current page before displaying the greeting */
+  if (greetingsElement) {
+    greetingsElement.innerHTML = `${generateRandomGreeting()} My name is Roland`;
   }
 }
 
