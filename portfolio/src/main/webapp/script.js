@@ -106,8 +106,7 @@ async function deleteComments() {
  */
 async function fetchBlobUrl() {
   const request = await fetch('/blobstore-upload-url');
-  const urlLink =  await request.text();
-  return urlLink;
+  return await request.text();
 }
 
 /** 
