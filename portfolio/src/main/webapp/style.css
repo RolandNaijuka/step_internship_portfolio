@@ -81,13 +81,13 @@ form button {
 }
 
 #logInLogOut {
-  margin: 10px 5px;
-  padding: 10px;
+  margin: 0.6rem 0.3rem;
+  padding: 0.6rem;
 }
 
 #logInLogOut a {
   text-decoration: none;
-  font-size: 1.063rem;
+  font-size: 1.2rem;
 }
 
 #logInLogOut a:hover {
