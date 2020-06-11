@@ -44,7 +44,7 @@ public class DeleteDataServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-    // get the email of the client
+    // Get the email of the client
     UserService userService = UserServiceFactory.getUserService();
     String emailAddress = userService.getCurrentUser().getEmail();
 
