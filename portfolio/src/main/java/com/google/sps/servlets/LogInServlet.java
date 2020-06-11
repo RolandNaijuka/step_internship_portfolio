@@ -43,26 +43,22 @@ public class LogInServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     LogInStatus logInStatus;
     
-    // check if the user is logged in and send their email address, or send details so that they can be redirected to login
-    if (userService.isUserLoggedIn()) {
-      boolean isLoggedIn = true;
+    
+    boolean isLoggeIn = userService.isUserLoggedIn();
+    String urlToRedirectToAfterUserLogOperation = "/contact.html";
+    
+    // Check if the user is logged in and send their email address, or send details so that they can be redirected to login
+    if (isLoggeIn) {
       String userEmail = userService.getCurrentUser().getEmail();
-      String urlToRedirectToAfterUserLogsOut = "/contact.html";
-      String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
+      String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogOperation);
       logInStatus = new LogInStatus(userEmail, logoutUrl);
-
-      // Convert the login details to json string
-      String logInDetails = new Gson().toJson(logInStatus);
-      response.getWriter().println(logInDetails);
     } else {
-      boolean isLoggedIn = false;
-      String urlToRedirectToAfterUserLogsOut = "/contact.html";
-      String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsOut);
+      String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogOperation);
       logInStatus = new LogInStatus(loginUrl);
-
-      // Convert the login details to json string
-      String logInDetails = new Gson().toJson(logInStatus);
-      response.getWriter().println(logInDetails);
     }
+
+    // Convert the login details to json string
+    String logInDetails = new Gson().toJson(logInStatus);
+    response.getWriter().println(logInDetails);
   }
 }
