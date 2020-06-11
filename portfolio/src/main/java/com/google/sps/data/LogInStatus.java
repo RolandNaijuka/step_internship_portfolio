@@ -32,7 +32,6 @@ public class LogInStatus {
   /**
    * Creates an instance when user is logged in
    * @param emailAddress The email address of the user who is logged in
-   * @param isLoggedIn This is true as the user is logged in
    * @param logUrl A string that holds the url where the user is redirected to
    */
   public LogInStatus(String emailAddress, String logUrl) {
@@ -44,7 +43,6 @@ public class LogInStatus {
   /**
    * Creates an instance when user is not logged in
    * @param emailAddress The email address is none here because the user is not logged in
-   * @param isLoggedIn This is false as the user is not logged in
    * @param logUrl A string that holds the url where the user is redirected to
    */
   public LogInStatus(String logUrl) {
