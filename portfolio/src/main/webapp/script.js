@@ -153,9 +153,9 @@ function generateRandomGreeting() {
  * Get the user's maximum if they type the number in the input field
  */
 function updateNumComments() {
-  const userNumComments = document.getElementById('numComments').value;
+  const userNumComments = document.getElementById('numComments');
   if (userNumComments) {
-    getUserComments(userNumComments);
+    getUserComments(userNumComments.value);
   }
 }
 
