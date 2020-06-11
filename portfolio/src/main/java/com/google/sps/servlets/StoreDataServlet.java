@@ -50,7 +50,7 @@ public class StoreDataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
-    // get the clients comments and name
+    // Get the clients comments and name
     String comment = getParameter(request,"comment","");
     String username = getParameter(request, "name","user");
 
@@ -66,7 +66,7 @@ public class StoreDataServlet extends HttpServlet {
       response.sendRedirect("/contact.html");
       return;
     }
-    // store the client's email address alongside their comments for better querying of individual comments
+    // Store the client's email address alongside their comments for better querying of individual comments
     Entity commentEntity = new Entity("Comments");
     commentEntity.setProperty("name",username);
     commentEntity.setProperty("comment",comment);
@@ -91,7 +91,7 @@ public class StoreDataServlet extends HttpServlet {
   }
 
   /** 
-   * Genereta a URL that points to the uploaded file. 
+   * Generate a URL that points to the uploaded file. 
    * @param request This holds the client's request details
    * @param formInputElementName This holds the name of the form which contains the clients file input field
    * @return the URL that points to the uploaded file or null if the client didn't upload a file
