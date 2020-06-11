@@ -32,13 +32,13 @@ async function checkIfUserIsLoggedIn() {
     userCommentsForm.style.display = 'block';
     logInLogOutDiv.innerHTML = '';
     logInLogOutDiv.appendChild(createParagraphElement(`Email Address: ${logInInfo.emailAddress}`));
-    logInLogOutDiv.appendChild(createAchorElement('Logout here', logInInfo.logUrl));
+    logInLogOutDiv.appendChild(createAnchorElement('Logout here', logInInfo.logUrl));
 
     // load the comments of the user
     updateNumComments();
   } else {
     logInLogOutDiv.innerHTML = '';
-    logInLogOutDiv.appendChild(createAchorElement('Login here to add comments', logInInfo.logUrl));
+    logInLogOutDiv.appendChild(createAnchorElement('Login here to add comments', logInInfo.logUrl));
   }
 
   /** set the display of the elements that depends on comments similar to the one for @var userCommentsForm */
@@ -52,7 +52,7 @@ async function checkIfUserIsLoggedIn() {
  * @param {String} url - url for the href attribute of the link
  * @returns {HTMLAnchorElement} with the text and url
  */
-function createAchorElement(text, url) {
+function createAnchorElement(text, url) {
   const anchorElement = document.createElement('a');
   anchorElement.appendChild(document.createTextNode(text));
   anchorElement.title = text;
@@ -156,10 +156,7 @@ function updateNumComments() {
   const userNumComments = document.getElementById('numComments').value;
   if (userNumComments) {
     getUserComments(userNumComments);
-  } else {
-    getUserComments();
   }
-  
 }
 
 /**
