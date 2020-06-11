@@ -109,9 +109,9 @@ public class StoreDataServlet extends HttpServlet {
     // Our form only contains a single file input, so get the first index.
     BlobKey blobKey = blobKeys.get(0);
 
-    // Client submitted form without selecting a file, so we can't get a URL. (live server)
     BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
-
+    
+    // Client submitted form without selecting a file, so we can't get a URL. (live server)
     if (blobInfo.getSize() == 0) {
       blobstoreService.delete(blobKey);
       return null;
