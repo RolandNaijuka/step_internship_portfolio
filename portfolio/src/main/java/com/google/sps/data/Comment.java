@@ -14,24 +14,32 @@
 
 package com.google.sps.data;
 
-public class Comment{
+/** Comment is a class for a comment that a user writes on the website */
+public class Comment {
 
-    /* Comment id for querying */
-    private long id;
-    
-    /* The comment of the users */
-    private String comment;
+  // A long to keep the id of the comment. This is used in querying the comment for database operations 
+  private long id;
+  
+   
+  // A string to keep the comment of the user
+  private String comment;
 
-    /** The name of the person commenting (or user) */
-    private String name;
+  // A string to keep the name of the person commenting (or user) 
+  private String name;
 
-    /** Image form the user */
-    private String imageUrl;
+  // A string that holds the url for the image from the user
+  private String imageUrl;
 
-    public Comment(long id, String name, String comment, String imageUrl){
-        this.id = id;
-        this.name = name;
-        this.comment = comment;
-        this.imageUrl = imageUrl;
-    }
+  /**
+   * Creats a new Comment object that represents the comment of a user
+   * @param id The id of the specific comment which is unique
+   * @param name The name of the user submitting the comment
+   * @param imageUrl The url link to the image from the user
+   */
+  public Comment(long id, String name, String comment, String imageUrl) {
+    this.id = id;
+    this.name = name;
+    this.comment = comment;
+    this.imageUrl = imageUrl;
+  }
 }
