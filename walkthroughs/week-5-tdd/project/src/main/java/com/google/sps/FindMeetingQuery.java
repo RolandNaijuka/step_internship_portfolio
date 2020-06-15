@@ -74,6 +74,9 @@ public final class FindMeetingQuery {
 
     // Sort the time ranges by the end time in ascending order
     Collections.sort(attendeesCannotScheduleHere, TimeRange.ORDER_BY_END);
+
+    // Remove the time ranges which are part of longer time ranges
+    removeNestedTimes(attendeesCannotScheduleHere);
     return possibleTimes;
   }
 
@@ -104,5 +107,24 @@ public final class FindMeetingQuery {
    */
   private boolean isAttendeeOfEvent(String attendee, Event event) {
     return event.getAttendees().contains(attendee) ? true : false;
+  }
+
+  /**
+   * Remove all the times that are nested in another time
+   * For instance in this case: |---------|
+   *                               |---|
+   * We will remove the short time in order to have few times to cross check over
+   * @param attendeesTimeranges holds a collection of timeranges that we would like to trim
+   */
+  private void removeNestedTimes(List<TimeRange> attendeesTimeranges) {
+    for (int i = 0; i < attendeesTimeranges.size(); i++) {
+      for (int j = 0; j < attendeesTimeranges.size(); j++) {
+        // Skip the Timeranges which are the same
+        if (i == j) continue;
+        else if (attendeesTimeranges.get(i).contains(attendeesTimeranges.get(j))) {
+          attendeesTimeranges.remove(j);
+        }
+      }
+    }
   }
 }
