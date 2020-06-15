@@ -60,6 +60,42 @@ public final class FindMeetingQuery {
 
     // List of all possible time ranges that attendees can have a meeting
     Collection<TimeRange> possibleTimes = new ArrayList<>();
+    // Create a list of attendees and add all the attendees to that list
+    Collection<String> attendees = new ArrayList<>();
+    attendees.addAll(request.getAttendees());
+
+    // Collection of timeranges that can not work for the proposed schedule
+    // These are times when the attendees have an event scheduled at that particular time
+    List<TimeRange> attendeesCannotScheduleHere = cannotSheduleMeeting(attendees, events); 
     return possibleTimes;
+  }
+
+  /** 
+   * Check for events which attendees are attending and mark those time ranges
+   * @param attendees is a collection of all the attendees for the required meeting
+   * @param events is a collection of all the events that are known
+   * @return a collection of all the time ranges when the {@code attendees} are busy and we cannot schedule meetings there
+  */
+  private List<TimeRange> cannotSheduleMeeting(Collection<String> attendees, Collection<Event> events) {
+    List<TimeRange> attendeesConflictingTimes = new ArrayList<>();
+    for (String currentAttendee: attendees) {
+      for (Event currentEvent: events) {
+        // Check to see if attendee attends the current event
+        if (isAttendeeOfEvent(currentAttendee, currentEvent)) {
+          attendeesConflictingTimes.add(currentEvent.getWhen());
+        }
+      }
+    }
+    return attendeesConflictingTimes;
+  }
+
+  /**
+   * Check if an event has this person as an attendee
+   * @param attendee represents the person we would like to check if they are attending a particular event
+   * @param event represents an event
+   * @return true if {@code attendee} is an attendee of {@code event}
+   */
+  private boolean isAttendeeOfEvent(String attendee, Event event) {
+    return event.getAttendees().contains(attendee) ? true : false;
   }
 }
