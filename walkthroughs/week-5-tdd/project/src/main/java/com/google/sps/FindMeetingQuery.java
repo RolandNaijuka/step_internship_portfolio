@@ -71,6 +71,9 @@ public final class FindMeetingQuery {
     //Return the whole day if all attendees are free for the whole day
     if (attendeesCannotScheduleHere.isEmpty()) 
       return Arrays.asList(TimeRange.WHOLE_DAY);
+
+    // Sort the time ranges by the end time in ascending order
+    Collections.sort(attendeesCannotScheduleHere, TimeRange.ORDER_BY_END);
     return possibleTimes;
   }
 
