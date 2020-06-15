@@ -82,7 +82,6 @@ public final class FindMeetingQuery {
       TimeRange currentTimeRange = attendeesCannotScheduleHere.get(index);
       int startOfCurrentTimeRange = currentTimeRange.start();
       int endOfCurrentTimeRange = currentTimeRange.end();
-      int durationOfCurrentTimeRange = currentTimeRange.duration();
 
       // We have 3 different ways we can schedule the meeting at according to the list of time ranges
       // 1. When we have the first end time, we can schedule before it's start time and start of day. It is also the first start time because we removed the nested times
