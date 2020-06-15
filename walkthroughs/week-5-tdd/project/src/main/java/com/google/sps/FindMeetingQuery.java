@@ -90,12 +90,12 @@ public final class FindMeetingQuery {
       // First(1) way
       if (index == 0) {
         addPossibleTime(START_OF_DAY, startOfCurrentTimeRange, false, durationOfMeeting, possibleTimes);
-        }
+      }
       // Second(2) way
       if (index +1 < attendeesCannotScheduleHere.size()) {
         TimeRange currentTimeRangePlusOne = attendeesCannotScheduleHere.get(index+1);
         addPossibleTime(endOfCurrentTimeRange, currentTimeRangePlusOne.start(), false, durationOfMeeting, possibleTimes);
-        }
+      }
       //Third(3) way
       if (index == attendeesCannotScheduleHere.size() - 1) {
         addPossibleTime(endOfCurrentTimeRange, END_OF_DAY, true, durationOfMeeting, possibleTimes);
@@ -114,10 +114,10 @@ public final class FindMeetingQuery {
    */
   private void addPossibleTime(int start, int end, boolean inclusive, long durationOfMeeting, Collection<TimeRange> possibleTimes) {
     TimeRange possibleTime = TimeRange.fromStartEnd(start, end, inclusive);
-        if (possibleTime.duration() >= durationOfMeeting) {
-          possibleTimes.add(possibleTime);
-        }
-      }
+    if (possibleTime.duration() >= durationOfMeeting) {
+      possibleTimes.add(possibleTime);
+    }
+  }
 
   /** 
    * Check for events which attendees are attending and mark those time ranges
