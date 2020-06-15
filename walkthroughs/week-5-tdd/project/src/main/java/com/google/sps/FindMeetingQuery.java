@@ -45,4 +45,21 @@ public final class FindMeetingQuery {
     // Call the helper function for all other cases that no edge cases
     return queryHelper(events, request);
   }
+
+  /**
+   * This is a helper function which returns the possible time ranges for the requested meeting
+   * @param events These are all the known events that are already scheduled
+   * @param request This is a meeting request that is to be scheduled
+   * @return a collection of all possible times that {@code request} can be scheduled
+   */
+  private Collection<TimeRange> queryHelper(Collection<Event> events, MeetingRequest request) {
+    // Define the variables to be used
+    int START_OF_DAY = TimeRange.START_OF_DAY;
+    int END_OF_DAY = TimeRange.END_OF_DAY;
+    long durationOfMeeting = request.getDuration();
+
+    // List of all possible time ranges that attendees can have a meeting
+    Collection<TimeRange> possibleTimes = new ArrayList<>();
+    return possibleTimes;
+  }
 }
