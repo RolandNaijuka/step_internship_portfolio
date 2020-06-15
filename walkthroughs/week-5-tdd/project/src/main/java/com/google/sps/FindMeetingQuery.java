@@ -77,6 +77,19 @@ public final class FindMeetingQuery {
 
     // Remove the time ranges which are part of longer time ranges
     removeNestedTimes(attendeesCannotScheduleHere);
+
+    for (int index = 0; index <attendeesCannotScheduleHere.size(); index++) {
+      TimeRange currentTimeRange = attendeesCannotScheduleHere.get(index);
+      int startOfCurrentTimeRange = currentTimeRange.start();
+      int endOfCurrentTimeRange = currentTimeRange.end();
+      int durationOfCurrentTimeRange = currentTimeRange.duration();
+
+      // We have 3 different ways we can schedule the meeting at according to the list of time ranges
+      // 1. When we have the first end time, we can schedule before it's start time and start of day. It is also the first start time because we removed the nested times
+      // 2. Times which are in between the first and last end time in the time ranges
+      // 3. The last end time, we can check if we can schedule an item between it and the end of day
+      // First(1) way
+    }
     return possibleTimes;
   }
 
