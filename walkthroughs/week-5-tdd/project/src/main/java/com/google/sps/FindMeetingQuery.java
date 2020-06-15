@@ -89,29 +89,35 @@ public final class FindMeetingQuery {
       // 3. The last end time, we can check if we can schedule an item between it and the end of day
       // First(1) way
       if (index == 0) {
-        TimeRange possibleTime = TimeRange.fromStartEnd(START_OF_DAY, startOfCurrentTimeRange, false); // TODO create function for this
-        if (possibleTime.duration() >= durationOfMeeting) { // TODO create function for this
-          possibleTimes.add(possibleTime);
+        addPossibleTime(START_OF_DAY, startOfCurrentTimeRange, false, durationOfMeeting, possibleTimes);
         }
-      }
       // Second(2) way
       if (index +1 < attendeesCannotScheduleHere.size()) {
         TimeRange currentTimeRangePlusOne = attendeesCannotScheduleHere.get(index+1);
-        TimeRange possibleTime = TimeRange.fromStartEnd(endOfCurrentTimeRange, currentTimeRangePlusOne.start(), false);
-        if (possibleTime.duration() >= durationOfMeeting) {
-          possibleTimes.add(possibleTime);
+        addPossibleTime(endOfCurrentTimeRange, currentTimeRangePlusOne.start(), false, durationOfMeeting, possibleTimes);
         }
-      }
       //Third(3) way
       if (index == attendeesCannotScheduleHere.size() - 1) {
-        TimeRange possibleTime = TimeRange.fromStartEnd(endOfCurrentTimeRange, END_OF_DAY, true);
-        if (possibleTime.duration() >= durationOfMeeting) {
-          possibleTimes.add(possibleTime);
-        }
+        addPossibleTime(endOfCurrentTimeRange, END_OF_DAY, true, durationOfMeeting, possibleTimes);
       }
     }
     return possibleTimes;
   }
+
+  /**
+   * Create and check if timerange is appropriate for scheduling requesting time
+   * @param start represents the start time for the time range we want to create
+   * @param end represents the end time for the time range we want to create
+   * @param inclusive this tells us if we would like to include the end time in our time range or not
+   * @param durationOfMeeting the duration of the requested meeting
+   * @param possibleTimes this is a list of all the possible times that we can schedule the meeting
+   */
+  private void addPossibleTime(int start, int end, boolean inclusive, long durationOfMeeting, Collection<TimeRange> possibleTimes) {
+    TimeRange possibleTime = TimeRange.fromStartEnd(start, end, inclusive);
+        if (possibleTime.duration() >= durationOfMeeting) {
+          possibleTimes.add(possibleTime);
+        }
+      }
 
   /** 
    * Check for events which attendees are attending and mark those time ranges
