@@ -68,7 +68,7 @@ public final class FindMeetingQuery {
     // These are times when the attendees have an event scheduled at that particular time
     List<TimeRange> attendeesCannotScheduleHere = cannotSheduleMeeting(attendees, events); 
 
-    //Return the whole day if all attendees are free for the whole day
+    // Return the whole day if all attendees are free for the whole day
     if (attendeesCannotScheduleHere.isEmpty()) 
       return Arrays.asList(TimeRange.WHOLE_DAY);
 
