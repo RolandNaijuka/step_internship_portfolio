@@ -94,7 +94,6 @@ public final class FindMeetingQuery {
     }
     return possibleTimes;
   }
-
   /**
    * Method runs the algorithm for adding possible times which work for either both mandatory and optional attendees or just mandatory attendees
    * @param attendees is a list of all the attendees for the meeeting that we are considering
@@ -105,7 +104,7 @@ public final class FindMeetingQuery {
     int START_OF_DAY = TimeRange.START_OF_DAY;
     int END_OF_DAY = TimeRange.END_OF_DAY;
 
-    for (int index = 0; index <attendees.size(); index++) {
+    for (int index = 0; index < attendees.size(); index++) {
       TimeRange currentTimeRange = attendees.get(index);
       int startOfCurrentTimeRange = currentTimeRange.start();
       int endOfCurrentTimeRange = currentTimeRange.end();
@@ -119,8 +118,8 @@ public final class FindMeetingQuery {
         addPossibleTime(START_OF_DAY, startOfCurrentTimeRange, false, durationOfMeeting, possibleTimes);
       }
       // Second(2) way
-      if (index +1 < attendees.size()) {
-        TimeRange currentTimeRangePlusOne = attendees.get(index+1);
+      if (index + 1 < attendees.size()) {
+        TimeRange currentTimeRangePlusOne = attendees.get(index + 1);
         addPossibleTime(endOfCurrentTimeRange, currentTimeRangePlusOne.start(), false, durationOfMeeting, possibleTimes);
       }
       //Third(3) way
