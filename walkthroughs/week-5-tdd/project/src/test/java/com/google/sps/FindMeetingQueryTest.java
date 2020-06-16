@@ -386,3 +386,28 @@ public final class FindMeetingQueryTest {
     Assert.assertEquals(expected, actual);
 }
 
+  @Test
+  public void justOptionalAttendeesWithNoGapsInSchedule() {
+    // Have two optional attendees, without gaps in their schedule
+    // Events  : |--A-----||------B----|
+    // Day     : |---------------------|
+    // Options :
+
+     Collection<Event> events = Arrays.asList(
+        new Event("Event 1", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0830AM, false),
+            Arrays.asList(PERSON_A)),
+        new Event("Event 2", TimeRange.fromStartEnd(TIME_0900AM, TimeRange.END_OF_DAY, true),
+            Arrays.asList(PERSON_B)));
+
+    MeetingRequest request =
+        new MeetingRequest(NO_ATTENDEES, DURATION_60_MINUTES);
+    
+    request.addOptionalAttendee(PERSON_A);
+    request.addOptionalAttendee(PERSON_B);
+
+    Collection<TimeRange> actual = query.query(events, request);
+    Collection<TimeRange> expected = Arrays.asList();
+
+    Assert.assertEquals(expected, actual);
+  }
+}
