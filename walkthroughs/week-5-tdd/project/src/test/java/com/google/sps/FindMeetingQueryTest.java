@@ -384,7 +384,7 @@ public final class FindMeetingQueryTest {
             TimeRange.fromStartEnd(TIME_0930AM, TimeRange.END_OF_DAY, true));
 
     Assert.assertEquals(expected, actual);
-}
+  }
 
   @Test
   public void justOptionalAttendeesWithNoGapsInSchedule() {
