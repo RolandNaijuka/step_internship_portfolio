@@ -14,10 +14,10 @@
 
 package com.google.sps;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.HashSet;
 import java.util.List;
@@ -78,7 +78,7 @@ public final class FindMeetingQuery {
     // Remove the time ranges which are part of longer time ranges
     removeNestedTimes(attendeesCannotScheduleHere);
 
-    for (int index = 0; index <attendeesCannotScheduleHere.size(); index++) {
+    for (int index = 0; index < attendeesCannotScheduleHere.size(); index++) {
       TimeRange currentTimeRange = attendeesCannotScheduleHere.get(index);
       int startOfCurrentTimeRange = currentTimeRange.start();
       int endOfCurrentTimeRange = currentTimeRange.end();
@@ -93,7 +93,7 @@ public final class FindMeetingQuery {
       }
       // Second(2) way
       if (index +1 < attendeesCannotScheduleHere.size()) {
-        TimeRange currentTimeRangePlusOne = attendeesCannotScheduleHere.get(index+1);
+        TimeRange currentTimeRangePlusOne = attendeesCannotScheduleHere.get(index + 1);
         addPossibleTime(endOfCurrentTimeRange, currentTimeRangePlusOne.start(), false, durationOfMeeting, possibleTimes);
       }
       //Third(3) way
