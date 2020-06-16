@@ -14,20 +14,20 @@
 
 package com.google.sps;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     // Consider the edge cases where there is no attendes or the meeting duration is more than 24 hours or there are no known events
 
-    // Options where there are no Attendees
-    if (request.getAttendees().isEmpty())
+    // Options where there are no Attendees and no optional attendees as well
+    if (request.getAttendees().isEmpty() && request.getOptionalAttendees().isEmpty())
       return Arrays.asList(TimeRange.WHOLE_DAY);
 
     // No options when meeting request is too long (more than a day)
@@ -54,8 +54,6 @@ public final class FindMeetingQuery {
    */
   private Collection<TimeRange> queryHelper(Collection<Event> events, MeetingRequest request) {
     // Define the variables to be used
-    int START_OF_DAY = TimeRange.START_OF_DAY;
-    int END_OF_DAY = TimeRange.END_OF_DAY;
     long durationOfMeeting = request.getDuration();
 
     // List of all possible time ranges that attendees can have a meeting
@@ -64,22 +62,48 @@ public final class FindMeetingQuery {
     Collection<String> attendees = new ArrayList<>();
     attendees.addAll(request.getAttendees());
 
+    // Create a list of all attendees (optional and mandatory) for the requested meeting
+    Collection<String> mandatoryAndOptionalAttendees = new ArrayList<>();
+    mandatoryAndOptionalAttendees.addAll(request.getOptionalAttendees());
+    mandatoryAndOptionalAttendees.addAll(attendees);
+
     // Collection of timeranges that can not work for the proposed schedule
     // These are times when the attendees have an event scheduled at that particular time
     List<TimeRange> attendeesCannotScheduleHere = cannotSheduleMeeting(attendees, events); 
 
-    //Return the whole day if all attendees are free for the whole day
-    if (attendeesCannotScheduleHere.isEmpty()) 
+    // Get the timeranges for the optional attendees
+    List<TimeRange>  mandatoryAndOptionalAttendeesCannotScheduleHere = cannotSheduleMeeting(mandatoryAndOptionalAttendees, events);
+
+    // Return the whole day if all attendees are free for the whole day annd there are no optional attendees
+    if (mandatoryAndOptionalAttendeesCannotScheduleHere.isEmpty()) 
       return Arrays.asList(TimeRange.WHOLE_DAY);
 
     // Sort the time ranges by the end time in ascending order
     Collections.sort(attendeesCannotScheduleHere, TimeRange.ORDER_BY_END);
+    Collections.sort(mandatoryAndOptionalAttendeesCannotScheduleHere, TimeRange.ORDER_BY_END);
 
     // Remove the time ranges which are part of longer time ranges
     removeNestedTimes(attendeesCannotScheduleHere);
+    removeNestedTimes(mandatoryAndOptionalAttendeesCannotScheduleHere);
 
-    for (int index = 0; index <attendeesCannotScheduleHere.size(); index++) {
-      TimeRange currentTimeRange = attendeesCannotScheduleHere.get(index);
+    // Check times that work for both optional and mandatory attendees
+    addRequestedMeetingToList(mandatoryAndOptionalAttendeesCannotScheduleHere, durationOfMeeting, possibleTimes);
+    // If there is no time that works for both optional and mandatory attendees, check for only mandatory attendees
+    if(possibleTimes.isEmpty()) {
+      addRequestedMeetingToList(attendeesCannotScheduleHere, durationOfMeeting, possibleTimes);
+    }
+    return possibleTimes;
+  }
+
+  /**
+   *
+   */
+  private void addRequestedMeetingToList(List<TimeRange> attendees, long durationOfMeeting, Collection<TimeRange> possibleTimes) {
+    int START_OF_DAY = TimeRange.START_OF_DAY;
+    int END_OF_DAY = TimeRange.END_OF_DAY;
+
+    for (int index = 0; index <attendees.size(); index++) {
+      TimeRange currentTimeRange = attendees.get(index);
       int startOfCurrentTimeRange = currentTimeRange.start();
       int endOfCurrentTimeRange = currentTimeRange.end();
 
@@ -92,16 +116,16 @@ public final class FindMeetingQuery {
         addPossibleTime(START_OF_DAY, startOfCurrentTimeRange, false, durationOfMeeting, possibleTimes);
       }
       // Second(2) way
-      if (index +1 < attendeesCannotScheduleHere.size()) {
-        TimeRange currentTimeRangePlusOne = attendeesCannotScheduleHere.get(index+1);
+      if (index +1 < attendees.size()) {
+        TimeRange currentTimeRangePlusOne = attendees.get(index+1);
         addPossibleTime(endOfCurrentTimeRange, currentTimeRangePlusOne.start(), false, durationOfMeeting, possibleTimes);
       }
       //Third(3) way
-      if (index == attendeesCannotScheduleHere.size() - 1) {
-        addPossibleTime(endOfCurrentTimeRange, END_OF_DAY, true, durationOfMeeting, possibleTimes);
+      if (index == attendees.size() - 1) {
+        if (endOfCurrentTimeRange < END_OF_DAY)
+          addPossibleTime(endOfCurrentTimeRange, END_OF_DAY, true, durationOfMeeting, possibleTimes);
       }
     }
-    return possibleTimes;
   }
 
   /**
@@ -115,7 +139,8 @@ public final class FindMeetingQuery {
   private void addPossibleTime(int start, int end, boolean inclusive, long durationOfMeeting, Collection<TimeRange> possibleTimes) {
     TimeRange possibleTime = TimeRange.fromStartEnd(start, end, inclusive);
     if (possibleTime.duration() >= durationOfMeeting) {
-      possibleTimes.add(possibleTime);
+      if (!possibleTimes.contains(possibleTime))
+        possibleTimes.add(possibleTime);
     }
   }
 
@@ -156,14 +181,20 @@ public final class FindMeetingQuery {
    * @param attendeesTimeranges holds a collection of timeranges that we would like to trim
    */
   private void removeNestedTimes(List<TimeRange> attendeesTimeranges) {
+    List<Integer> indicesToRemove = new ArrayList<>();
     for (int i = 0; i < attendeesTimeranges.size(); i++) {
-      for (int j = 0; j < attendeesTimeranges.size(); j++) {
-        // Skip the Timeranges which are the same
-        if (i == j) continue;
-        else if (attendeesTimeranges.get(i).contains(attendeesTimeranges.get(j))) {
-          attendeesTimeranges.remove(j);
+      for (int j = i + 1; j < attendeesTimeranges.size(); j++) {
+        if (attendeesTimeranges.get(i).contains(attendeesTimeranges.get(j))) {
+          indicesToRemove.add(j);
+        }else if (attendeesTimeranges.get(j).contains(attendeesTimeranges.get(i))) {
+          indicesToRemove.add(i);
         }
       }
+    }
+    int trackDeleted = 0;
+    for (int index: indicesToRemove) {
+      attendeesTimeranges.remove(index - trackDeleted);
+      trackDeleted++;
     }
   }
 }
