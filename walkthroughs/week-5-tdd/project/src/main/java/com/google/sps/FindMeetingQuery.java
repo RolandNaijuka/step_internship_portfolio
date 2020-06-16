@@ -96,7 +96,10 @@ public final class FindMeetingQuery {
   }
 
   /**
-   *
+   * Method runs the algorithm for adding possible times which work for either both mandatory and optional attendees or just mandatory attendees
+   * @param attendees is a list of all the attendees for the meeeting that we are considering
+   * @param durationOfMeeting is the length / duration of the requested meeting
+   * @param possibleTimes this is a list of all the possible times that we can schedule the meeting
    */
   private void addRequestedMeetingToList(List<TimeRange> attendees, long durationOfMeeting, Collection<TimeRange> possibleTimes) {
     int START_OF_DAY = TimeRange.START_OF_DAY;
@@ -181,6 +184,7 @@ public final class FindMeetingQuery {
    * @param attendeesTimeranges holds a collection of timeranges that we would like to trim
    */
   private void removeNestedTimes(List<TimeRange> attendeesTimeranges) {
+    // Keep traack of the indices to be removed
     List<Integer> indicesToRemove = new ArrayList<>();
     for (int i = 0; i < attendeesTimeranges.size(); i++) {
       for (int j = i + 1; j < attendeesTimeranges.size(); j++) {
@@ -191,6 +195,8 @@ public final class FindMeetingQuery {
         }
       }
     }
+    // Every time an element is removed from a list, the indices are reduced. Keep track of deleted elements and subtract from indicesToRemove
+    // Did not implement it in the above iterations because, there is no better way I could keep track of i and j at the same with one single value
     int trackDeleted = 0;
     for (int index: indicesToRemove) {
       attendeesTimeranges.remove(index - trackDeleted);

@@ -125,10 +125,12 @@ public final class FindMeetingQueryTest {
 
   @Test
   public void everyAttendeeIsConsideredExceptOptionalAttendee() {
-    // Have each person have different events. We should see two options because each person has
-    // split the restricted times.
+    // Have each person have different events. Have an optional attendee who has an entire day of events
+    // We should see three options because each person has split the restricted times.
+    // We should not consider the optional attendee
     //
     // Events  :       |--A--|     |--B--|
+    // Optional: |------------C----------------|
     // Day     : |-----------------------------|
     // Options : |--1--|     |--2--|     |--3--|
 
@@ -158,10 +160,12 @@ public final class FindMeetingQueryTest {
   public void everyAttendeeIsConsideredAndOptionalAttendee() {
     // Have each person have different events. We should see two options because each person has
     // split the restricted times.
+    // Have an optional attendee as well whose schedule still allows for meeting
     //
     // Events  :       |--A--|     |--B--|
+    // Optional:            |--C--|
     // Day     : |-----------------------------|
-    // Options : |--1--|     |--2--|     |--3--|
+    // Options : |--1--|                |--3--|
 
     Collection<Event> events = Arrays.asList(
         new Event("Event 1", TimeRange.fromStartDuration(TIME_0800AM, DURATION_30_MINUTES),
@@ -289,9 +293,13 @@ public final class FindMeetingQueryTest {
   public void justEnoughRoomNoOptionalAttendeeConsidered() {
     // Have one person, but make it so that there is just enough room at one point in the day to
     // have the meeting.
+    // Have optional attendee and make it so that they have less time during to meet during the
+    // time mandatory attendees can meeeet
+    // 
     //
-    // Events  : |--A--|     |----A----|
-    // Day     : |---------------------|
+    // Events  : |--A--|         |----A----|
+    // Optional:       |-C-|
+    // Day     : |-------------------------|
     // Options :       |-----|
 
     Collection<Event> events = Arrays.asList(
