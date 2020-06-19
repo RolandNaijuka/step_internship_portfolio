@@ -39,8 +39,9 @@ public final class FindMeetingQuery {
     // No events
     if (events.isEmpty()) {
       // No events but there is a valid meeting request
-      if (request.getDuration() <= TimeRange.WHOLE_DAY.duration())
+      if (request.getDuration() <= TimeRange.WHOLE_DAY.duration()) {
         return Arrays.asList(TimeRange.WHOLE_DAY);
+      }
       return Arrays.asList();
     }
 
@@ -117,7 +118,8 @@ public final class FindMeetingQuery {
       int endOfCurrentTimeRange = currentTimeRange.end();
 
       // We have 3 different ways we can schedule the meeting at according to the list of time ranges
-      // 1. When we have the first end time, we can schedule before it's start time and start of day. It is also the first start time because we removed the nested times
+      // 1. When we have the first end time, we can schedule before it's start time and start of day.
+      // It is also the first start time because we removed the nested times
       // 2. Times which are in between the first and last end time in the time ranges
       // 3. The last end time, we can check if we can schedule an item between it and the end of day
       // First(1) way
@@ -126,8 +128,8 @@ public final class FindMeetingQuery {
       }
       // Second(2) way
       if (index + 1 < attendeesTimeranges.size()) {
-        TimeRange currentTimeRangePlusOne = attendeesTimeranges.get(index + 1);
-        addPossibleTime(endOfCurrentTimeRange, currentTimeRangePlusOne.start(), false, durationOfMeeting, possibleTimes);
+        TimeRange nextTimeRange = attendeesTimeranges.get(index + 1);
+        addPossibleTime(endOfCurrentTimeRange, nextTimeRange.start(), false, durationOfMeeting, possibleTimes);
       }
       //Third(3) way
       if ((index == attendeesTimeranges.size() - 1) && endOfCurrentTimeRange < END_OF_DAY) {
@@ -137,7 +139,8 @@ public final class FindMeetingQuery {
   }
 
   /**
-   * Create and check if timerange is appropriate for scheduling requesting time
+   * Create and check if timerange is appropriate for scheduling requesting time.
+   * If an available time is found, it is added to {@code possibleTimes}
    * @param start represents the start time for the time range we want to create
    * @param end represents the end time for the time range we want to create
    * @param inclusive this tells us if we would like to include the end time in our time range or not
